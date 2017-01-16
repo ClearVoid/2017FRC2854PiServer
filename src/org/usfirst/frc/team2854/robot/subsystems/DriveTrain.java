@@ -16,7 +16,7 @@ public class DriveTrain extends Subsystem{
 	private static int driveTrainType;
 	private static final int driveCimCount = 4;
 	private SpeedController[] driveCim = new SpeedController[driveCimCount];//0 = fl, 1 = fr, 2 = bl, 4, br; Even numbers left, odd right; int/2 is front or back
-	private static final int driveEncoderCount;
+	private static final int driveEncoderCount = 2;
 	private Encoder[] driveEncoder = new Encoder[driveEncoderCount];
 	private RobotDrive drive;
 	
@@ -24,7 +24,6 @@ public class DriveTrain extends Subsystem{
 		this.driveTrainType = driveTrainType;
 		for(int i =0;i<driveCimCount;i++){driveCim[i] = new Victor(i);}
 		for(int i = 0; i < driveCimCount;i++){LiveWindow.addActuator("DriveTrain", String.valueOf(i), (Victor) driveCim[i]);}
-		drive = new RobotDrive();
 		
 	}
 	private void rotate(){
