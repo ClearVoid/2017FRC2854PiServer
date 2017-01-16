@@ -16,7 +16,7 @@ import javax.swing.JSlider;
 import com.github.sarxos.webcam.Webcam;
 
 public class Main {
-	public static Webcam webcam = Webcam.getDefault();
+	public static Webcam webcam = Webcam.getWebcams().get(1);
 	
 	public static BufferedImage feedFrame;
 	public static BufferedImage feedProc;
@@ -93,15 +93,16 @@ public class Main {
 		feedProc = ImageUtil.f2b(ImageUtil.singleBandEdgeDetection(feedProc)[0]);
 		feedProc = ImageUtil.threshHold(feedProc,threshHold);
 		feedProc = ImageUtil.invert(feedProc);
-		g2.drawImage(feedProc, 0, 0, null);
+	//	g2.drawImage(feedProc, 0, 0, null);
 		
 		feedProc = EdgeThin.thin(feedProc, 5);
-		feedProc = ImageUtil.resize(feedProc, 500, 500);
+	//	feedProc = ImageUtil.resize(feedProc, 500, 500);
 		g.drawImage(feedProc, 0, 0, feedProc.getWidth(), feedProc.getHeight(), null);
-		g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
+	//	g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
 		
 	}
 	public static void main(String[] args) throws IOException {
+		System.out.println("Running");
 		webcamInit();
 		JFrameInit();
 		
@@ -122,11 +123,11 @@ public class Main {
 			
 			feedProcess(lowPass,threshHold);
 			
-			if(deltaTime >= 1000000000l) {deltaTime = 0;System.out.println(frames);System.out.println("lowPass: " + lowPass + " threshHold: " + threshHold);frames = 0;}
+			if(deltaTime >= 1000000000l) {System.out.println("FPS: " + 1000000000d/(double)(startTime - lastTime));}
 			
-			frame.repaint();
-			frame1.repaint();
-			frame2.repaint();
+		//	frame.repaint();
+		//	frame1.repaint();
+		//	frame2.repaint();
 			frames++;
 			lastTime = startTime;		
 		}
