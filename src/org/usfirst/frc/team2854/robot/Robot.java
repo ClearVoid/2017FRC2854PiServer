@@ -23,7 +23,7 @@ public class Robot extends IterativeRobot {
 	Joystick stick;
 
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
-	public static int driveTrainType = 0;
+	public static final int driveTrainType = 0;
 	public static final DriveTrain hSlide = new DriveTrain(0);
 	public static final DriveTrain tankDrive = new DriveTrain(1);
 	public static OI oi;
@@ -33,14 +33,13 @@ public class Robot extends IterativeRobot {
     SendableChooser chooser;
 
     public void robotInit() {
-		oi = new OI();
-        chooser = new SendableChooser();
-        chooser.addDefault("Default Auto", new ExampleCommand());
-//        chooser.addObject("My Auto", new MyAutoCommand());
-        SmartDashboard.putData("Auto mode", chooser);
-        int stickPort = 0;
-        stick = new Joystick(stickPort);
-        
+    	oi = new OI();
+    	chooser = new SendableChooser();
+    	chooser.addDefault("Default Auto", new ExampleCommand());
+//      chooser.addObject("My Auto", new MyAutoCommand());
+    	SmartDashboard.putData("Auto mode", chooser);
+    	
+    	
     }
 	
     public void disabledInit(){
@@ -51,11 +50,11 @@ public class Robot extends IterativeRobot {
          */
     }
 	
-	public void disabledPeriodic() {
+	public void disabledPeriodic(){
 		Scheduler.getInstance().run();
 	}
 	
-    public void autonomousInit() {	
+    public void autonomousInit(){	
     	/**
     	 * This autonomous (along with the chooser code above) shows how to select between different autonomous modes
     	 * using the dashboard. The sendable chooser code works with the Java SmartDashboard. If you prefer the LabVIEW
@@ -82,8 +81,7 @@ public class Robot extends IterativeRobot {
         if (autonomousCommand != null) autonomousCommand.start();
     }
 
-
-    public void autonomousPeriodic() {    
+    public void autonomousPeriodic(){    
     	/**
          * This function is called periodically during autonomous
          */
@@ -91,10 +89,10 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-		
+    	int stickPort = 0;
+    	stick = new Joystick(stickPort);
         if (autonomousCommand != null) autonomousCommand.cancel();
     }
-
 
     public void teleopPeriodic() {   
     	/**

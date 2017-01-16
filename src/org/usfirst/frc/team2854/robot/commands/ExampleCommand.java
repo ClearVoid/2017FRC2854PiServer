@@ -13,21 +13,19 @@ public class ExampleCommand extends Command {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.exampleSubsystem);
     }
-
-    protected void initialize() {
-    }
-
-    protected void execute() {
-    }
-
-    protected boolean isFinished() {
-        return false;
-    }
-    
-    protected void end() {
-    }
-
-    protected void interrupted() {
-    	System.out.println("ERROR: INTERUPTED");
-    }
+    protected void initialize(){
+		
+	}
+	protected void execute(){
+		
+	}
+	protected boolean isFinished(){
+		return false;
+	}
+	protected void end(){
+		
+	}
+	protected void interrupted(){
+		System.out.println("ERROR: INTERRUPTED");
+	}
 }
