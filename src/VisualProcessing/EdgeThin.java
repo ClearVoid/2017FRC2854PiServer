@@ -27,6 +27,7 @@ public class EdgeThin {
 	}
 
 	public static BufferedImage thin(BufferedImage img, int iterations) {
+		init();
 		ArrayList<Point> delete = new ArrayList<Point>();
 		BufferedImage out = ImageUtil.copy(img);
 

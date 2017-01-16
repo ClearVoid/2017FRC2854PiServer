@@ -16,39 +16,55 @@ import javax.swing.JSlider;
 import com.github.sarxos.webcam.Webcam;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-		Webcam webcam = Webcam.getDefault();
-		if (webcam != null) {
-			System.out.println("Webcam: " + webcam.getName());
-		} else {
-			System.out.println("No webcam detected");
-		}
-		
+	public static Webcam webcam = Webcam.getDefault();
+	
+	public static BufferedImage feedFrame;
+	public static BufferedImage feedProc;
+	
+	public static JFrame frame = new JFrame();
+	public static JFrame frame1 = new JFrame();
+	public static JFrame frame2 = new JFrame();
+	
+	public static BufferedImage screen;
+	public static BufferedImage screen2;
+	
+	public static Graphics g;	
+	public static Graphics g1;	
+	public static Graphics g2;
+	
+	public static JFrame options = new JFrame();
+	public static JSlider bar1 = new JSlider();
+	public static JSlider bar2 = new JSlider();
+	
+	public static long lastTime = System.nanoTime();
+	public static long startTime = System.nanoTime();
+	public static long deltaTime = 0;
+	public static int frames;
+	
+	
+	public static void webcamInit(){
+		if (webcam != null){System.out.println("Webcam: " + webcam.getName());} else {System.out.println("No webcam detected");}
 		webcam.open();
-		
-		BufferedImage img = webcam.getImage();
-		
-		JFrame frame = new JFrame();
-		JFrame frame1 = new JFrame();
-		JFrame frame2 = new JFrame();
-		
-		BufferedImage screen = new BufferedImage(img.getWidth() * 10, img.getHeight() * 10, BufferedImage.TYPE_3BYTE_BGR);
-		Graphics g = screen.createGraphics();
+		feedFrame = webcam.getImage();
+	}
+	public static void JFrameInit(){
+		BufferedImage screen = new BufferedImage(feedFrame.getWidth() * 10, feedFrame.getHeight() * 10, BufferedImage.TYPE_3BYTE_BGR);
+		g = screen.createGraphics();
 	
 		frame.add(new JLabel(new ImageIcon(screen)));
 		frame.pack();
 		frame.setVisible(true);
 		
-		BufferedImage screen2 = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-		Graphics g2 = screen2.createGraphics();
+		BufferedImage screen2 = new BufferedImage(feedFrame.getWidth(), feedFrame.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+		g2 = screen2.createGraphics();
 	
 		frame2.add(new JLabel(new ImageIcon(screen2)));
 		frame2.pack();
 		frame2.setVisible(true);
 		
 		
-		BufferedImage screen1 = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-		Graphics g1 = screen1.createGraphics();
+		BufferedImage screen1 = new BufferedImage(feedFrame.getWidth(), feedFrame.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+		g1 = screen1.createGraphics();
 
 	
 		frame1.add(new JLabel(new ImageIcon(screen1)));
@@ -57,8 +73,6 @@ public class Main {
 		frame1.setLocationRelativeTo(null);
 		frame.setLocation(500, 500);
 		
-		JFrame options = new JFrame();
-		JSlider bar1 = new JSlider();
 		bar1.setMaximum(500);
 		bar1.setValue(108);
 		bar1.setMinimum(1);
@@ -71,11 +85,30 @@ public class Main {
 		options.pack();
 		options.setResizable(false);
 		options.setVisible(true);
+	}
+	public static void feedProcess(int lowPass, int threshHold){
+		feedFrame =webcam.getImage();
+		feedProc = ImageUtil.grayScale(feedFrame);
+		feedProc = ImageUtil.lowPass(feedProc, lowPass/100f);
+		feedProc = ImageUtil.f2b(ImageUtil.singleBandEdgeDetection(feedProc)[0]);
+		feedProc = ImageUtil.threshHold(feedProc,threshHold);
+		feedProc = ImageUtil.invert(feedProc);
+		g2.drawImage(feedProc, 0, 0, null);
 		
-		long lastTime = System.nanoTime();
-		long startTime = System.nanoTime();
-		long deltaTime = 0;
-		int frames = 0;
+		feedProc = EdgeThin.thin(feedProc, 5);
+		feedProc = ImageUtil.resize(feedProc, 500, 500);
+		g.drawImage(feedProc, 0, 0, feedProc.getWidth(), feedProc.getHeight(), null);
+		g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
+		
+	}
+	public static void main(String[] args) throws IOException {
+		webcamInit();
+		JFrameInit();
+		
+		lastTime = System.nanoTime();
+		startTime = System.nanoTime();
+		deltaTime = 0;
+		frames = 0;
 		
 		int lowPass = 3;
 		int threshHold = 34;
@@ -87,24 +120,9 @@ public class Main {
 			threshHold = bar2.getValue();
 			lowPass = bar1.getValue();
 			
-			img =webcam.getImage();
-			BufferedImage imgProc = ImageUtil.grayScale(img);
-			imgProc = ImageUtil.lowPass(imgProc, lowPass/100f);
-			imgProc = ImageUtil.f2b(ImageUtil.singleBandEdgeDetection(imgProc)[0]);
-			imgProc = ImageUtil.threshHold(imgProc,threshHold);
-			imgProc = ImageUtil.invert(imgProc);
-			g2.drawImage(imgProc, 0, 0, null);
+			feedProcess(lowPass,threshHold);
 			
-			imgProc = EdgeThin.thin(imgProc, 5);
-			imgProc = ImageUtil.resize(imgProc, 500, 500);
-			g.drawImage(imgProc, 0, 0, imgProc.getWidth(), imgProc.getHeight(), null);
-			g1.drawImage(img, 0, 0, img.getWidth(), img.getHeight(), null);
-			if(deltaTime >= 1000000000l) {
-				deltaTime = 0;
-				System.out.println(frames);
-				System.out.println("lowPass: " + lowPass + " threshHold: " + threshHold);
-				frames = 0;
-			}
+			if(deltaTime >= 1000000000l) {deltaTime = 0;System.out.println(frames);System.out.println("lowPass: " + lowPass + " threshHold: " + threshHold);frames = 0;}
 			
 			frame.repaint();
 			frame1.repaint();
