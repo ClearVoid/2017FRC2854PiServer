@@ -12,20 +12,21 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 public class EdgeThin {
-	final float[][] structEle = { { 0, 0, 0 }, { 2, 255, 2 }, { 255, 255, 255 } };
+	private static final float[][] structEle = { { 0, 0, 0 }, { 2, 255, 2 }, { 255, 255, 255 } };
 
-	final float[][] structEle1 = { { 2, 0, 0 }, { 255, 255, 0 }, { 2, 255, 2 } };
+	private static float[][] structEle1 = { { 2, 0, 0 }, { 255, 255, 0 }, { 2, 255, 2 } };
 
-	private Matrix[] aStructs = new Matrix[8];
+	private static Matrix[] aStructs = new Matrix[8];
 
-	public EdgeThin() {
+	private static void init(){
 		Matrix struct = new Matrix(structEle);
 		Matrix struct1 = new Matrix(structEle1);
 		for (int i = 0; i < 4; i++) {aStructs[i] = Matrix.rotateMatrixN(struct, i);}
 		for (int i = 0; i < 4; i++) {aStructs[i + 4] = Matrix.rotateMatrixN(struct1, i);}
+		
 	}
 
-	public BufferedImage thin(BufferedImage img, int iterations) {
+	public static BufferedImage thin(BufferedImage img, int iterations) {
 		ArrayList<Point> delete = new ArrayList<Point>();
 		BufferedImage out = ImageUtil.copy(img);
 
@@ -57,14 +58,11 @@ public class EdgeThin {
 				}
 			}
 			for (Point p : delete) {
-				// System.out.println("Removing: " + delete);
 				out.setRGB((int) p.getX(), (int) p.getY(), new Color(255, 255, 255).getRGB());
 			}
 			delete.clear();
 		}
 
-		// System.out.println(img.getWidth() + " " + out.getWidth() + " " +
-		// img.getHeight() + " " + out.getHeight());
 		if (ImageUtil.equals(img, out) && iterations < 0) {
 			return out;
 		} else {
@@ -72,5 +70,4 @@ public class EdgeThin {
 		}
 
 	}
-
 }

@@ -80,8 +80,6 @@ public class Main {
 		int lowPass = 3;
 		int threshHold = 34;
 		
-		EdgeThin thin = new EdgeThin();
-		 
 		while(true) {
 			startTime = System.nanoTime();
 			deltaTime += -(lastTime - startTime);
@@ -97,7 +95,7 @@ public class Main {
 			imgProc = ImageUtil.invert(imgProc);
 			g2.drawImage(imgProc, 0, 0, null);
 			
-			imgProc = thin.thin(imgProc, 5);
+			imgProc = EdgeThin.thin(imgProc, 5);
 			imgProc = ImageUtil.resize(imgProc, 500, 500);
 			g.drawImage(imgProc, 0, 0, imgProc.getWidth(), imgProc.getHeight(), null);
 			g1.drawImage(img, 0, 0, img.getWidth(), img.getHeight(), null);
