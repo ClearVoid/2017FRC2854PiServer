@@ -40,6 +40,39 @@ public class ImageUtil {
 
 		return dimg;
 	}
+	
+	/**
+	 * 
+	 * @param img The image
+	 * @param ratios Array of average pixel rations in the order {red/blue,  blue/green, red/green}
+	 * @param standardDevations Array of pixel ration standard deviations in the order {red/blue,  blue/green, red/green}
+	 * @param Standarderror the Z-score error. Percent Error is found by A(z) - A(-z)
+	 * @return an image with non similar colors changed to white
+	 */
+	public static BufferedImage colorCut(BufferedImage img, float[] averages, float[] standardDevations, float Standarderror) {
+		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+		for(int x = 0; x < img.getWidth(); x++) {
+			for(int y = 0; y < img.getHeight(); y++) {
+				int rgb = img.getRGB(x, y);
+				float red = (rgb >> 16) & 0x000000FF;
+				float green = (rgb >>8 ) & 0x000000FF;
+				float blue = (rgb) & 0x000000FF;
+				
+				float zR = (red - averages[0])/standardDevations[0];
+				float zB = (blue - averages[1])/standardDevations[1];
+				float zG = (green - averages[2])/standardDevations[2];
+				
+				if(Math.abs(zR) <= Standarderror && Math.abs(zB) <= Standarderror && Math.abs(zG) <= Standarderror) {
+					out.setRGB(x, y, rgb);
+				} else {
+					out.setRGB(x, y, (new Color(255, 255, 255).getRGB()));
+				}
+				
+			}
+		}
+		return out;
+		
+	}
 
 	public static int[][] grayScale(BufferedImage img, int type) {
 		int[][] out = new int[img.getHeight()][img.getWidth()];
@@ -133,20 +166,21 @@ public class ImageUtil {
 	}
 
 	public static BufferedImage f2b(int[][] data) {
-		int height = data[0].length;
-		int width = data.length;
-
-		BufferedImage out = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
-
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				// System.out.println((int) (data[x][y]/3f));
-				int pixel =  (data[x][y]);
-				pixel = pixel > 255 ? 255 : pixel;
-				out.setRGB(x, y, (new Color(pixel, pixel, pixel)).getRGB());
+		int width = data[0].length;
+		int height = data.length;
+		
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+		
+		for(int x = 0; x < width; x++) {
+			for(int y = 0; y < height; y++) {
+				int pixel = data[y][x];
+				img.setRGB(x, y, (new Color(pixel, pixel, pixel).getRGB()));
+				
 			}
 		}
-		return out;
+		
+		return img;
+		
 	}
 
 	public static int[][] singleBandEdgeDetection(int[][] img) {

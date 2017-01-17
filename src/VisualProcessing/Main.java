@@ -17,7 +17,7 @@ import com.github.sarxos.webcam.Webcam;
 
 
 public class Main {
-	public static Webcam webcam = Webcam.getWebcams().get(1);
+	public static Webcam webcam = Webcam.getWebcams().get(2);
 	
 	public static BufferedImage feedFrame;
 	public static BufferedImage feedProc;
@@ -46,25 +46,27 @@ public class Main {
 	
 	public static void webcamInit(){
 		System.out.println("Initializing Webcam");
+		System.out.println(Webcam.getWebcams());
 		if (webcam != null){System.out.println("Webcam: " + webcam.getName());} else {System.out.println("No webcam detected");}
 		webcam.open();
 		feedFrame = webcam.getImage();
 	}
 	public static void JFrameInit(){
 		System.out.println("Initializing JFrames");
-		BufferedImage screen = new BufferedImage(feedFrame.getWidth() * 10, feedFrame.getHeight() * 10, BufferedImage.TYPE_3BYTE_BGR);
+		BufferedImage screen = new BufferedImage(feedFrame.getWidth(), feedFrame.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 		g = screen.createGraphics();
 	
 		frame.add(new JLabel(new ImageIcon(screen)));
 		frame.pack();
-	//	frame.setVisible(true);
+		frame.setVisible(true);
+		frame.setTitle("Final Image");
 		
 		BufferedImage screen2 = new BufferedImage(feedFrame.getWidth(), feedFrame.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 		g2 = screen2.createGraphics();
 	
 		frame2.add(new JLabel(new ImageIcon(screen2)));
 		frame2.pack();
-	//	frame2.setVisible(true);
+		//frame2.setVisible(true);
 		
 		
 		BufferedImage screen1 = new BufferedImage(feedFrame.getWidth(), feedFrame.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
@@ -73,8 +75,9 @@ public class Main {
 	
 		frame1.add(new JLabel(new ImageIcon(screen1)));
 		frame1.pack();
-	//	frame1.setVisible(true);
+		frame1.setVisible(true);
 		frame1.setLocationRelativeTo(null);
+		frame1.setTitle("Camera");
 		frame.setLocation(500, 500);
 		
 		bar1.setMaximum(500);
@@ -90,11 +93,14 @@ public class Main {
 		options.setResizable(false);
 		options.setVisible(true);
 	}
-	public static void feedProcess(int lowPass, int threshHold){
-		long startTime = System.nanoTime();
+	public static void feedProcess(int lowPass, int threshHold, float[] averages, float[] devations){
+		long startTime = System.nanoTime(); 
 		feedFrame = webcam.getImage();
 		System.out.printf("%-35s%,15d\n", "Time to get image: " , -(startTime - (startTime = System.nanoTime())));
-		feedArr = ImageUtil.grayScale(feedFrame);
+		feedProc = ImageUtil.colorCut(feedFrame, averages, devations, bar1.getValue()/100f); 
+		System.out.println(bar1.getValue()/100f);
+		System.out.printf("%-35s%,15d\n", "Time to color cut: " , -(startTime - (startTime = System.nanoTime())));
+		feedArr = ImageUtil.grayScale(feedProc);
 		System.out.printf("%-35s%,15d\n","Time to grayScale: " , -(startTime - (startTime = System.nanoTime())) );
 		feedArr = ImageUtil.lowPass(feedArr, lowPass/100f);
 		System.out.printf("%-35s%,15d\n","Time to low pass: " , -(startTime - (startTime = System.nanoTime())) );
@@ -103,21 +109,20 @@ public class Main {
 		feedArr = ImageUtil.threshHold(feedArr,threshHold);
 		System.out.printf("%-35s%,15d\n","Time to thresh hold: " , -(startTime - (startTime = System.nanoTime())) );
 		feedArr = ImageUtil.invert(feedArr);
-		//g2.drawImage(feedProc, 0, 0, null);
 		System.out.printf("%-35s%,15d\n","Time to invert: " , -(startTime - (startTime = System.nanoTime())) );
-		feedArr = EdgeThin.thin(feedArr);
+		//feedArr = EdgeThin.thin(feedArr);
 		System.out.printf("%-35s%,15d\n","Time to thin: " , -(startTime - (startTime = System.nanoTime())) );
 		System.out.println();
-		//feedProc = ImageUtil.resize(feedProc, 500, 500);
-		//feedProc = ImageUtil.f2b(feedArr);
-		//g.drawImage(feedProc, 0, 0, feedProc.getWidth(), feedProc.getHeight(), null);
-		//g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
+		feedProc = ImageUtil.resize(feedProc, 500, 500);
+		feedProc = ImageUtil.f2b(feedArr);
+		g.drawImage(feedProc, 0, 0, feedProc.getWidth(), feedProc.getHeight(), null);
+		g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
 		
 	}
 	public static void main(String[] args) throws IOException {
 		
 		webcamInit();
-		//JFrameInit();
+		JFrameInit();
 		EdgeThin.init();
 		System.out.println("Starting to run");
 		lastTime = System.nanoTime();
@@ -128,21 +133,25 @@ public class Main {
 		int lowPass = 3;
 		int threshHold = 34;
 		
+		final float[] ratios = new float[] {255f, 255f, 255f};
+		final float[] devations = new float[] {10f, 10f, 10f};
+		
 		while(true) {
 
 			startTime = System.nanoTime();
 			deltaTime += -(lastTime - startTime);
 			
-			threshHold = bar2.getValue();
-			lowPass = bar1.getValue();
+			//threshHold = (int) (bar2.getValue());
+			//lowPass = bar1.getValue();
+			System.out.println(threshHold + " " + lowPass);
 			
-			feedProcess(lowPass,threshHold);
+			feedProcess(lowPass,threshHold, ratios, devations);
 			
 			if(deltaTime >= 1000000000l) {System.out.println("FPS: " + 1000000000d/(double)(startTime - lastTime));}
 			
-		//	frame.repaint();
-		//	frame1.repaint();
-		//	frame2.repaint();
+			frame.repaint();
+			frame1.repaint();
+			//frame2.repaint();
 			frames++;
 			lastTime = startTime;		
 

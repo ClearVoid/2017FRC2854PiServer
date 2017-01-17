@@ -25,11 +25,14 @@ public class EdgeThin {
 		ArrayList<Point> delete = new ArrayList<Point>();
 		int width = img[0].length;
 		int height = img.length;
-		int[][] out = new int[height - 2][width - 2];
+		int[][] out = new int[height][width];
 
-		for (int i = 1; i < img.length - 1; i++) {
-			System.arraycopy(img[i], 0, out[i-1], 0, width - 2);
+		for (int i = 0; i < img.length ; i++) {
+			System.arraycopy(img[i], 0, out[i], 0, width);
 		}
+		
+		//ImageUtil.showImage(ImageUtil.f2b(out));
+		
 
 		boolean hasChanged = false;
 
@@ -38,11 +41,11 @@ public class EdgeThin {
 				for (int y = 1; y < height - 1; y++) {
 
 					int[][] pixels = new int[][] {
-							{ img[y - 1][x - 1], img[y - 1][x],
-									img[y - 1][x + 1] },
-							{ img[y][x - 1], img[y][x], img[y][x + 1] },
-							{ img[y + 1][x - 1], img[y + 1][x],
-									img[y + 1][x + 1] } };
+							{ out[y - 1][x - 1], out[y - 1][x],
+								out[y - 1][x + 1] },
+							{ out[y][x - 1], out[y][x], out[y][x + 1] },
+							{ out[y + 1][x - 1], out[y + 1][x],
+								out[y + 1][x + 1] } };
 
 					boolean shouldDelete = true;
 					for (int i = 0; i < 3; i++) {
@@ -50,7 +53,7 @@ public class EdgeThin {
 							if (kernel[j][i] == 2 || !shouldDelete) {
 								continue;
 							}
-							if (kernel[j][i] == pixels[j][i]) {
+							if (kernel[j][i] != pixels[j][i]) {
 								shouldDelete = false;
 							}
 						}
@@ -70,6 +73,7 @@ public class EdgeThin {
 		if (!hasChanged) {
 			return out;
 		} else {
+			//ImageUtil.showImage(ImageUtil.f2b(out));
 			return thin(out);
 		}
 
