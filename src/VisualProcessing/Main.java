@@ -17,7 +17,7 @@ import com.github.sarxos.webcam.Webcam;
 
 
 public class Main {
-	public static Webcam webcam = Webcam.getWebcams().get(2);
+	public static Webcam webcam = Webcam.getDefault();
 	
 	public static BufferedImage feedFrame;
 	public static BufferedImage feedProc;
@@ -94,27 +94,27 @@ public class Main {
 		options.setVisible(true);
 	}
 	public static void feedProcess(int lowPass, int threshHold, float[] averages, float[] devations){
-		long startTime = System.nanoTime(); 
+		//long startTime = System.nanoTime(); 
 		feedFrame = webcam.getImage();
-		System.out.printf("%-35s%,15d\n", "Time to get image: " , -(startTime - (startTime = System.nanoTime())));
+		//System.out.printf("%-35s%,15d\n", "Time to get image: " , -(startTime - (startTime = System.nanoTime())));
 		feedProc = ImageUtil.colorCut(feedFrame, averages, devations, bar1.getValue()/100f); 
-		System.out.println(bar1.getValue()/100f);
-		System.out.printf("%-35s%,15d\n", "Time to color cut: " , -(startTime - (startTime = System.nanoTime())));
-		feedArr = ImageUtil.grayScale(feedProc);
-		System.out.printf("%-35s%,15d\n","Time to grayScale: " , -(startTime - (startTime = System.nanoTime())) );
+		//System.out.println(bar1.getValue()/100f);
+		//System.out.printf("%-35s%,15d\n", "Time to color cut: " , -(startTime - (startTime = System.nanoTime())));
+		feedArr = ImageUtil.grayScale(feedFrame);
+		//System.out.printf("%-35s%,15d\n","Time to grayScale: " , -(startTime - (startTime = System.nanoTime())) );
 		feedArr = ImageUtil.lowPass(feedArr, lowPass/100f);
-		System.out.printf("%-35s%,15d\n","Time to low pass: " , -(startTime - (startTime = System.nanoTime())) );
+		//System.out.printf("%-35s%,15d\n","Time to low pass: " , -(startTime - (startTime = System.nanoTime())) );
 		feedArr = ImageUtil.singleBandEdgeDetection(feedArr);
-		System.out.printf("%-35s%,15d\n","Time to edge detect: " , -(startTime - (startTime = System.nanoTime())) );
+		//System.out.printf("%-35s%,15d\n","Time to edge detect: " , -(startTime - (startTime = System.nanoTime())) );
 		feedArr = ImageUtil.threshHold(feedArr,threshHold);
-		System.out.printf("%-35s%,15d\n","Time to thresh hold: " , -(startTime - (startTime = System.nanoTime())) );
+		//System.out.printf("%-35s%,15d\n","Time to thresh hold: " , -(startTime - (startTime = System.nanoTime())) );
 		feedArr = ImageUtil.invert(feedArr);
-		System.out.printf("%-35s%,15d\n","Time to invert: " , -(startTime - (startTime = System.nanoTime())) );
+		//System.out.printf("%-35s%,15d\n","Time to invert: " , -(startTime - (startTime = System.nanoTime())) );
 		//feedArr = EdgeThin.thin(feedArr);
-		System.out.printf("%-35s%,15d\n","Time to thin: " , -(startTime - (startTime = System.nanoTime())) );
-		System.out.println();
-		feedProc = ImageUtil.resize(feedProc, 500, 500);
-		feedProc = ImageUtil.f2b(feedArr);
+		//System.out.printf("%-35s%,15d\n","Time to thin: " , -(startTime - (startTime = System.nanoTime())) );
+		//System.out.println();
+		//feedProc = ImageUtil.resize(feedProc, 500, 500);
+		feedProc = ImageUtil.arrayToImg(feedArr);
 		g.drawImage(feedProc, 0, 0, feedProc.getWidth(), feedProc.getHeight(), null);
 		g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
 		
@@ -141,8 +141,9 @@ public class Main {
 			startTime = System.nanoTime();
 			deltaTime += -(lastTime - startTime);
 			
-			//threshHold = (int) (bar2.getValue());
-			//lowPass = bar1.getValue();
+			threshHold = (int) (bar2.getValue());
+			lowPass = bar1.getValue();
+			
 			System.out.println(threshHold + " " + lowPass);
 			
 			feedProcess(lowPass,threshHold, ratios, devations);

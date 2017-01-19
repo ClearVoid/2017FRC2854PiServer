@@ -29,6 +29,8 @@ public class ImageUtil {
 		g.dispose();
 		return resizedImage;
 	}
+	
+	
 
 	public static BufferedImage resize(BufferedImage img, int newW, int newH) {
 		Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
@@ -165,7 +167,7 @@ public class ImageUtil {
 
 	}
 
-	public static BufferedImage f2b(int[][] data) {
+	public static BufferedImage arrayToImg(int[][] data) {
 		int width = data[0].length;
 		int height = data.length;
 		
@@ -182,6 +184,7 @@ public class ImageUtil {
 		return img;
 		
 	}
+	
 
 	public static int[][] singleBandEdgeDetection(int[][] img) {
 
@@ -509,5 +512,129 @@ public class ImageUtil {
 		return out;
 
 	}
+	
+
+	public static Point findCenter(int[][] img) {
+		
+		int xAvg = 0;
+		int yAvg = 0;
+		int width = img[0].length;
+		int height = img.length;
+		int total = 0;
+		for(int x = 0; x < width ; x++) {
+			for(int y = 0; y < height; y++) {
+				
+				if(img[y][x] == 0) {
+					xAvg += x;
+					yAvg += y;
+					total++;
+				}
+				
+			}
+		}
+		
+		xAvg /= total;
+		yAvg /= total;
+		
+		return new Point(xAvg, yAvg);
+	}
+	
+	public static int[][][] splitImage(int[][] img, Point p, boolean vertical) {
+		int width = img[0].length;
+		int height = img.length;
+		int[][] img1;
+		int[][] img2;
+		if(vertical) {
+			
+			img1 = new int[height][(int) p.getX()];
+			img2 = new int[height][(int) (width - p.getX())];
+			
+			for(int x = 0; x < width; x++) {
+				for(int y = 0; y < height; y++) {
+					if( x < p.getX()) {
+						img1[y][x] = img[y][x];
+					} else {
+						img2[y][(int) (x - p.getX())] = img[y][x];
+					} 
+				}
+			}
+			
+		} else {
+			
+
+			img1 = new int[(int) p.getY()][width];
+			img2 = new int[(int) (height - p.getY())][width];
+			
+			for(int x = 0; x < width; x++) {
+				for(int y = 0; y < height; y++) {
+					if( y < p.getY()) {
+						img1[y][x] = img[y][x];
+					} else {
+						img2[(int) (y - p.getY())][x] = img[y][x];
+					} 
+				}
+			}
+			
+		}
+		
+		return new int[][][] {img1, img2};
+	}
+	
+	public static int[] findImageMaxX(int[][] img, Point center, boolean right) {
+		return findImageMaxX(img, center, 0, right, false, new int[2]);
+	}
+	
+	private static int[] findImageMaxX(int[][] img, Point center, int width, boolean right, boolean found, int[] data) {
+		
+		if(img[center.y][center.x + width] == 255 && !found) {
+			data[0] = right ? width : -width;
+			return findImageMaxX(img, center, width+(right?1:-1),right,  false, data);
+		} else if(img[center.y][center.x + width] == 0) {
+			return findImageMaxX(img, center, width+(right?1:-1), right, true, data);
+		} else {
+			data[1] = right ? width : -width;
+			return data;
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @return {width, leftHeight, rightHeight}
+	 */
+	public static int[] getDimensions(int[][] img) {
+		Point p = ImageUtil.findCenter(img);
+		System.out.println(p);
+		// int[][][] split = ImageUtil.splitImage(data, p, false);
+		int[] width1 = ImageUtil.findImageMaxX(img, p, true);
+		int[] width2 = ImageUtil.findImageMaxX(img, p, false);
+		int avgWidth1 = (width1[0] + width1[1])/2;		
+		int avgWidth2 = (width2[0] + width2[1])/2;
+		int width = (avgWidth1 + avgWidth2);
+
+		int rightHeight =  ImageUtil.findImageMaxY(img, new Point(p.x + avgWidth1, p.y), true)
+				+ ImageUtil.findImageMaxY(img, new Point(p.x + avgWidth1, p.y), false);
+		
+		int leftHeight = ImageUtil.findImageMaxY(img, new Point(p.x - avgWidth2, p.y), true)
+				+ ImageUtil.findImageMaxY(img, new Point(p.x - avgWidth2, p.y), false);
+				
+		return new int[] {width, leftHeight, rightHeight};
+	}
+	
+	public static int findImageMaxY(int[][] img, Point center, boolean up) {
+		return findImageMaxY(img, center, 0, up);
+	}
+	
+	private static int findImageMaxY(int[][] img, Point center, int height, boolean up) {
+		
+		if(img[center.y + height][center.x] == 0) {
+			return findImageMaxY(img, center, height+ (up?-1:1), up);
+		} else {
+			return up?-height:height;
+		}
+	}
+	
+	
+	
 
 }
