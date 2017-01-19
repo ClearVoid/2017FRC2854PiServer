@@ -103,7 +103,7 @@ public class Main {
 		
 		
 		bar1.setMaximum(500);
-		bar1.setValue(3.34 * 50);
+		bar1.setValue((int) (3.34 * 50));
 		bar1.setMinimum(1);
 		bar1.setPaintLabels(true);
 		bar2.setMaximum(500);
