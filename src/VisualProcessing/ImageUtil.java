@@ -30,7 +30,13 @@ public class ImageUtil {
 		return resizedImage;
 	}
 	
-	
+	public static void drawLargePixel(BufferedImage img, int x, int y, int rgb) {
+		img.setRGB(x, y, rgb);
+		img.setRGB(x+1, y, rgb);
+		img.setRGB(x-1, y, rgb);
+		img.setRGB(x, y+1, rgb);
+		img.setRGB(x, y-1, rgb);
+	}
 
 	public static BufferedImage resize(BufferedImage img, int newW, int newH) {
 		Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);

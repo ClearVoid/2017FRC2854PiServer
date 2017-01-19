@@ -2,14 +2,19 @@ package VisualProcessing;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.SpringLayout;
+import javax.swing.SwingUtilities;
 
 import com.github.sarxos.webcam.Webcam;
 
@@ -17,7 +22,8 @@ import com.github.sarxos.webcam.Webcam;
 
 
 public class Main {
-	public static Webcam webcam = Webcam.getDefault();
+	//public static Webcam webcam = Webcam.getDefault();
+	public static Webcam webcam = Webcam.getWebcams().get(2);
 	
 	public static BufferedImage feedFrame;
 	public static BufferedImage feedProc;
@@ -37,6 +43,13 @@ public class Main {
 	public static JFrame options = new JFrame();
 	public static JSlider bar1 = new JSlider();
 	public static JSlider bar2 = new JSlider();
+	public static JSlider bar3 = new JSlider();
+	
+	public static JLabel label1 = new JLabel();
+	public static JLabel label2 = new JLabel();
+	public static JLabel label3 = new JLabel();
+	
+	public static JPanel panel = new JPanel();
 	
 	public static long lastTime = System.nanoTime();
 	public static long startTime = System.nanoTime();
@@ -80,29 +93,53 @@ public class Main {
 		frame1.setTitle("Camera");
 		frame.setLocation(500, 500);
 		
-		bar1.setMaximum(500);
-		bar1.setValue(108);
-		bar1.setMinimum(1);
-		JSlider bar2 = new JSlider();
-		bar2.setMaximum(255);
-		bar2.setValue(167);
+		label1.setText("ColorCut Error: ");
+		label1.setLabelFor(bar1);
+		label2.setText("LowPass: ");
+		label2.setLabelFor(bar2);
+		label3.setText("ThreshHold: ");
+		label3.setLabelFor(bar3);
 		
-		options.add(bar1, BorderLayout.PAGE_START);
-		options.add(bar2, BorderLayout.PAGE_END);
-		options.pack();
+		
+		
+		bar1.setMaximum(500);
+		bar1.setValue(3.34 * 50);
+		bar1.setMinimum(1);
+		bar1.setPaintLabels(true);
+		bar2.setMaximum(500);
+		bar2.setValue(5 * 100);
+		bar2.setMinimum(1);
+		bar2.setPaintLabels(true);
+		bar3.setMaximum(500);
+		bar3.setValue(183);
+		bar3.setMinimum(1);
+		bar3.setPaintLabels(true);
+		
+		panel = new JPanel();
+		
+		panel.add(label1);
+		panel.add(bar1);
+		panel.add(label2);
+		panel.add(bar2);
+		panel.add(label3);
+		panel.add(bar3);
+		
+		options.add(panel);
+		options.setSize(1000, 65);
 		options.setResizable(false);
+		//options.pack();
 		options.setVisible(true);
 	}
-	public static void feedProcess(int lowPass, int threshHold, float[] averages, float[] devations){
+	public static void feedProcess(float lowPass, int threshHold, float[] averages, float[] devations, float stError){
 		//long startTime = System.nanoTime(); 
 		feedFrame = webcam.getImage();
 		//System.out.printf("%-35s%,15d\n", "Time to get image: " , -(startTime - (startTime = System.nanoTime())));
-		feedProc = ImageUtil.colorCut(feedFrame, averages, devations, bar1.getValue()/100f); 
+		feedProc = ImageUtil.colorCut(feedFrame, averages, devations, stError); 
 		//System.out.println(bar1.getValue()/100f);
 		//System.out.printf("%-35s%,15d\n", "Time to color cut: " , -(startTime - (startTime = System.nanoTime())));
 		feedArr = ImageUtil.grayScale(feedFrame);
 		//System.out.printf("%-35s%,15d\n","Time to grayScale: " , -(startTime - (startTime = System.nanoTime())) );
-		feedArr = ImageUtil.lowPass(feedArr, lowPass/100f);
+		feedArr = ImageUtil.lowPass(feedArr, lowPass);
 		//System.out.printf("%-35s%,15d\n","Time to low pass: " , -(startTime - (startTime = System.nanoTime())) );
 		feedArr = ImageUtil.singleBandEdgeDetection(feedArr);
 		//System.out.printf("%-35s%,15d\n","Time to edge detect: " , -(startTime - (startTime = System.nanoTime())) );
@@ -114,7 +151,9 @@ public class Main {
 		//System.out.printf("%-35s%,15d\n","Time to thin: " , -(startTime - (startTime = System.nanoTime())) );
 		//System.out.println();
 		//feedProc = ImageUtil.resize(feedProc, 500, 500);
+		Point p = ImageUtil.findCenter(feedArr);
 		feedProc = ImageUtil.arrayToImg(feedArr);
+		ImageUtil.drawLargePixel(feedProc, p.x, p.y, new Color(255, 0, 0).getRGB());
 		g.drawImage(feedProc, 0, 0, feedProc.getWidth(), feedProc.getHeight(), null);
 		g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
 		
@@ -130,8 +169,9 @@ public class Main {
 		deltaTime = 0;
 		frames = 0;
 		
-		int lowPass = 3;
+		float lowPass = 3;
 		int threshHold = 34;
+		float stError = 3;
 		
 		final float[] ratios = new float[] {255f, 255f, 255f};
 		final float[] devations = new float[] {10f, 10f, 10f};
@@ -141,14 +181,21 @@ public class Main {
 			startTime = System.nanoTime();
 			deltaTime += -(lastTime - startTime);
 			
-			threshHold = (int) (bar2.getValue());
-			lowPass = bar1.getValue();
+			stError = bar1.getValue() / 50f;
+			lowPass = bar2.getValue() / 100f;
+			threshHold = bar3.getValue();
 			
-			System.out.println(threshHold + " " + lowPass);
+			label1.setText("ColorCut Error: " + stError);
+			label2.setText("LowPass: " + lowPass);
+			label3.setText("ThreshHold: " + threshHold);
 			
-			feedProcess(lowPass,threshHold, ratios, devations);
+			feedProcess(lowPass,threshHold, ratios, devations, stError);
 			
-			if(deltaTime >= 1000000000l) {System.out.println("FPS: " + 1000000000d/(double)(startTime - lastTime));}
+			if(deltaTime >= 1000000000l) {
+				System.out.println("FPS: " + 1000000000d/(double)(startTime - lastTime)); 
+				deltaTime = 0;
+				System.out.println(label1.getText() + " " + label2.getText() + " " + label3.getText());
+			}
 			
 			frame.repaint();
 			frame1.repaint();
