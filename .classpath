@@ -5,5 +5,6 @@
 	<classpathentry kind="lib" path="libraries/bridj-0.6.2.jar"/>
 	<classpathentry kind="lib" path="libraries/slf4j-api-1.7.2.jar"/>
 	<classpathentry kind="lib" path="libraries/webcam-capture-0.3.10.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kevin/wpilib/java/current/lib/WPILib.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

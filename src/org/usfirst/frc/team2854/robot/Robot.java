@@ -1,4 +1,3 @@
-
 package org.usfirst.frc.team2854.robot;
 
 import org.usfirst.frc.team2854.robot.commands.*;
@@ -20,15 +19,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	Joystick stick;
-
+	int stickPort = 0;
+	private Joystick stick = new Joystick(stickPort);
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
-	public static final int driveTrainType = 0;
-	public static final DriveTrain hSlide = new DriveTrain(0);
 	public static final DriveTrain tankDrive = new DriveTrain(1);
 	public static OI oi;
 	
-
     Command autonomousCommand;
     SendableChooser chooser;
 
@@ -38,7 +34,6 @@ public class Robot extends IterativeRobot {
     	chooser.addDefault("Default Auto", new ExampleCommand());
 //      chooser.addObject("My Auto", new MyAutoCommand());
     	SmartDashboard.putData("Auto mode", chooser);
-    	
     	
     }
 	
@@ -92,12 +87,11 @@ public class Robot extends IterativeRobot {
     	int stickPort = 0;
     	stick = new Joystick(stickPort);
         if (autonomousCommand != null) autonomousCommand.cancel();
+        
     }
 
     public void teleopPeriodic() {   
-    	/**
-         * This function is called periodically during operator control
-         */
+    	
         Scheduler.getInstance().run();
     }
     
