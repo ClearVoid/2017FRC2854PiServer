@@ -20,7 +20,7 @@ public class Test {
 			System.out.println(Arrays.toString(ImageUtil.getDimensions(data)));
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 

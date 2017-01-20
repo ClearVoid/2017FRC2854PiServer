@@ -80,7 +80,6 @@ public class EdgeThin {
 	}
 
 	public static int[][] rotate(int[][] array, int n) {
-
 		int[][] out = new int[3][3];
 		for (int i = 0; i < array.length; i++) {
 			System.arraycopy(array[i], 0, out[i], 0, 3);
