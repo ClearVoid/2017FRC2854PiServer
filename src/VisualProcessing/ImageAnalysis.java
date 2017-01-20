@@ -9,7 +9,7 @@ public class ImageAnalysis {
 
 	public static void main(String[] args) {
 		
-		String path = "src/VisualProcessing/reflectiveTape.JPG";
+		String path = "src/VisualProcessing/binder.png";
 		try {
 		File file = new File(path);
 		

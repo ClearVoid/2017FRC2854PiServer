@@ -31,11 +31,15 @@ public class ImageUtil {
 	}
 	
 	public static void drawLargePixel(BufferedImage img, int x, int y, int rgb) {
+		try {
 		img.setRGB(x, y, rgb);
 		img.setRGB(x+1, y, rgb);
 		img.setRGB(x-1, y, rgb);
 		img.setRGB(x, y+1, rgb);
 		img.setRGB(x, y-1, rgb);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return;
+		}
 	}
 
 	public static BufferedImage resize(BufferedImage img, int newW, int newH) {
@@ -539,6 +543,9 @@ public class ImageUtil {
 			}
 		}
 		
+		if(total == 0) {
+			return null;
+		}
 		xAvg /= total;
 		yAvg /= total;
 		
