@@ -600,7 +600,7 @@ public class ImageUtil {
 	
 	private static int[] findImageMaxX(int[][] img, Point center, int width, boolean right, boolean found, int[] data) {
 		try {
-		if(img[center.y][center.x + width] == 255 && !found) {
+		if(img[center.y][center.x + width] == 255 && !found){
 			data[0] = right ? width : -width;
 			return findImageMaxX(img, center, width+(right?1:-1),right,  false, data);
 		} else if(img[center.y][center.x + width] == 0) {
@@ -621,7 +621,10 @@ public class ImageUtil {
 	 */
 	public static int[] getDimensions(int[][] img) {
 		Point p = ImageUtil.findCenter(img);
-		System.out.println(p);
+		//System.out.println(p);
+		if(p == null) {
+			return new int[] {-1, -1, -1};
+		}
 		// int[][][] split = ImageUtil.splitImage(data, p, false);
 		int[] width1 = ImageUtil.findImageMaxX(img, p, true);
 		int[] width2 = ImageUtil.findImageMaxX(img, p, false);
@@ -634,7 +637,6 @@ public class ImageUtil {
 		
 		int leftHeight = ImageUtil.findImageMaxY(img, new Point(p.x - avgWidth2, p.y), true)
 				+ ImageUtil.findImageMaxY(img, new Point(p.x - avgWidth2, p.y), false);
-				
 		return new int[] {width, leftHeight, rightHeight};
 	}
 	
@@ -643,8 +645,9 @@ public class ImageUtil {
 	}
 	
 	private static int findImageMaxY(int[][] img, Point center, int height, boolean up) {
+		
 		try {
-		if(img[center.y + height][center.x] == 0) {
+		if(img[center.y + height][center.x] == 0 || img[center.y + height][center.x+1] == 0 || img[center.y + height][center.x-1] == 0) {
 			return findImageMaxY(img, center, height+ (up?-1:1), up);
 		} else {
 			return up?-height:height;
@@ -654,6 +657,9 @@ public class ImageUtil {
 		}
 	}
 	
+	public static double getDistance(int screenWidth, int projectedWidth, double actualWidth, double tanAngle) {
+		return screenWidth * actualWidth / (projectedWidth * tanAngle);
+	}
 	
 	
 

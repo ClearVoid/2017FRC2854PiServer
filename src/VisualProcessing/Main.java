@@ -3,6 +3,7 @@ package VisualProcessing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -61,6 +62,7 @@ public class Main {
 	public static long deltaTime = 0;
 	public static int frames;
 	
+	public static final double tanAngle =  1.333;
 	
 	public static void webcamInit(){
 		System.out.println("Initializing Webcam");
@@ -108,15 +110,15 @@ public class Main {
 		
 		
 		bar1.setMaximum(500);
-		bar1.setValue((int) (14.6 * 10));
+		bar1.setValue((int) (2.12 * 50));
 		bar1.setMinimum(1);
 		bar1.setPaintLabels(true);
 		bar2.setMaximum(500);
 		bar2.setValue((int) (.73 * 100));
 		bar2.setMinimum(1);
 		bar2.setPaintLabels(true);
-		bar3.setMaximum(500);
-		bar3.setValue(87);
+		bar3.setMaximum(1000);
+		bar3.setValue(173);
 		bar3.setMinimum(1);
 		bar3.setPaintLabels(true);
 		
@@ -137,6 +139,7 @@ public class Main {
 	public static void feedProcess(float lowPass, int threshHold, float[] averages, float[] devations, float stError){
 		//long startTime = System.nanoTime(); 
 		feedFrame = webcam.getImage();
+		//System.out.println(feedFrame.getWidth());
 		//System.out.printf("%-35s%,15d\n", "Time to get image: " , -(startTime - (startTime = System.nanoTime())));
 		feedProc = ImageUtil.colorCut(feedFrame, averages, devations, stError); 
 		//System.out.println(bar1.getValue()/100f);
@@ -160,7 +163,8 @@ public class Main {
 		if(p != null) {
 			ImageUtil.drawLargePixel(feedProc, p.x * 2, p.y * 2, new Color(255, 0, 0).getRGB());
 		}
-		System.out.println(Arrays.toString(ImageUtil.getDimensions(feedArr)));
+		int[] data = ImageUtil.getDimensions(feedArr);
+		System.out.println(ImageUtil.getDistance(feedFrame.getWidth(), data[0], .29, tanAngle));
 		g.drawImage(feedProc, 0, 0, feedProc.getWidth(), feedProc.getHeight(), null);
 		g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
 		
@@ -189,7 +193,7 @@ public class Main {
 			startTime = System.nanoTime();
 			deltaTime += -(lastTime - startTime);
 			
-			stError = bar1.getValue() / 10f;
+			stError = bar1.getValue() / 50f;
 			lowPass = bar2.getValue() / 100f;
 			threshHold = bar3.getValue();
 			
