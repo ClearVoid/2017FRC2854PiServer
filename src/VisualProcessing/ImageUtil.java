@@ -594,11 +594,12 @@ public class ImageUtil {
 	}
 	
 	public static int[] findImageMaxX(int[][] img, Point center, boolean right) {
+		
 		return findImageMaxX(img, center, 0, right, false, new int[2]);
 	}
 	
 	private static int[] findImageMaxX(int[][] img, Point center, int width, boolean right, boolean found, int[] data) {
-		
+		try {
 		if(img[center.y][center.x + width] == 255 && !found) {
 			data[0] = right ? width : -width;
 			return findImageMaxX(img, center, width+(right?1:-1),right,  false, data);
@@ -607,6 +608,9 @@ public class ImageUtil {
 		} else {
 			data[1] = right ? width : -width;
 			return data;
+		}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return new int[] {-1, -1, -1};
 		}
 		
 	}
@@ -639,11 +643,14 @@ public class ImageUtil {
 	}
 	
 	private static int findImageMaxY(int[][] img, Point center, int height, boolean up) {
-		
+		try {
 		if(img[center.y + height][center.x] == 0) {
 			return findImageMaxY(img, center, height+ (up?-1:1), up);
 		} else {
 			return up?-height:height;
+		}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return -1;
 		}
 	}
 	

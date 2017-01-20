@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -159,6 +160,7 @@ public class Main {
 		if(p != null) {
 			ImageUtil.drawLargePixel(feedProc, p.x * 2, p.y * 2, new Color(255, 0, 0).getRGB());
 		}
+		System.out.println(Arrays.toString(ImageUtil.getDimensions(feedArr)));
 		g.drawImage(feedProc, 0, 0, feedProc.getWidth(), feedProc.getHeight(), null);
 		g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
 		
