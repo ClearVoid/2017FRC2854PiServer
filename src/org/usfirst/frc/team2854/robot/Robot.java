@@ -19,22 +19,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	int stickPort = 0;
-	private Joystick stick = new Joystick(stickPort);
-	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+	int stickCount = 2;
+	int stickPorts[] = {0,1};
+	private Joystick stick[] = new Joystick[stickCount];//stick[0] would be the teleop, and stick[1] would be something else I suppose?
 	public static final DriveTrain tankDrive = new DriveTrain(1);
 	public static OI oi;
 	
     Command autonomousCommand;
     SendableChooser chooser;
 
-    public void robotInit() {
+    public void robotInit(){
     	oi = new OI();
     	chooser = new SendableChooser();
     	chooser.addDefault("Default Auto", new ExampleCommand());
 //      chooser.addObject("My Auto", new MyAutoCommand());
     	SmartDashboard.putData("Auto mode", chooser);
-    	
+    	for(int i = 0; i < stickCount; i++){stick[i] = new Joystick(stickPorts[i]);}
     }
 	
     public void disabledInit(){
@@ -84,14 +84,12 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-    	int stickPort = 0;
-    	stick = new Joystick(stickPort);
         if (autonomousCommand != null) autonomousCommand.cancel();
+        
         
     }
 
-    public void teleopPeriodic() {   
-    	
+    public void teleopPeriodic(){
         Scheduler.getInstance().run();
     }
     
