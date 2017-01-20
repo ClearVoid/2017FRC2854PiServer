@@ -31,11 +31,15 @@ public class ImageUtil {
 	}
 	
 	public static void drawLargePixel(BufferedImage img, int x, int y, int rgb) {
+		try {
 		img.setRGB(x, y, rgb);
 		img.setRGB(x+1, y, rgb);
 		img.setRGB(x-1, y, rgb);
 		img.setRGB(x, y+1, rgb);
 		img.setRGB(x, y-1, rgb);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return;
+		}
 	}
 
 	public static BufferedImage resize(BufferedImage img, int newW, int newH) {
@@ -539,6 +543,9 @@ public class ImageUtil {
 			}
 		}
 		
+		if(total == 0) {
+			return null;
+		}
 		xAvg /= total;
 		yAvg /= total;
 		
@@ -587,11 +594,12 @@ public class ImageUtil {
 	}
 	
 	public static int[] findImageMaxX(int[][] img, Point center, boolean right) {
+		
 		return findImageMaxX(img, center, 0, right, false, new int[2]);
 	}
 	
 	private static int[] findImageMaxX(int[][] img, Point center, int width, boolean right, boolean found, int[] data) {
-		
+		try {
 		if(img[center.y][center.x + width] == 255 && !found) {
 			data[0] = right ? width : -width;
 			return findImageMaxX(img, center, width+(right?1:-1),right,  false, data);
@@ -600,6 +608,9 @@ public class ImageUtil {
 		} else {
 			data[1] = right ? width : -width;
 			return data;
+		}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return new int[] {-1, -1, -1};
 		}
 		
 	}
@@ -632,11 +643,14 @@ public class ImageUtil {
 	}
 	
 	private static int findImageMaxY(int[][] img, Point center, int height, boolean up) {
-		
+		try {
 		if(img[center.y + height][center.x] == 0) {
 			return findImageMaxY(img, center, height+ (up?-1:1), up);
 		} else {
 			return up?-height:height;
+		}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return -1;
 		}
 	}
 	
