@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.AnalogGyro;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,6 +25,8 @@ public class Robot extends IterativeRobot {
 	private Joystick stick[] = new Joystick[stickCount];//stick[0] would be the teleop, and stick[1] would be something else I suppose?
 	public static final DriveTrain tankDrive = new DriveTrain(1);
 	public static OI oi;
+	public static int gyroPort = 2;
+	public static AnalogGyro gyro;
 	
     Command autonomousCommand;
     SendableChooser chooser;
@@ -35,6 +38,7 @@ public class Robot extends IterativeRobot {
 //      chooser.addObject("My Auto", new MyAutoCommand());
     	SmartDashboard.putData("Auto mode", chooser);
     	for(int i = 0; i < stickCount; i++){stick[i] = new Joystick(stickPorts[i]);}
+    	gyro = new AnalogGyro(gyroPort);
     }
 	
     public void disabledInit(){

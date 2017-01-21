@@ -18,12 +18,11 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 public class DriveTrain extends Subsystem{
 	private static final int driveCimCount = 4;
 	private SpeedController[] driveCim = new SpeedController[driveCimCount];//0 = fl, 1 = fr, 2 = bl, 4, br; Even numbers left, odd right; int/2 is front or back
-	//private static final int driveEncoderCount = 2;
-	//private Encoder[] driveEncoder = new Encoder[driveEncoderCount];
+	private static final int driveEncoderCount = 2;
+	private Encoder[] driveEncoder = new Encoder[driveEncoderCount];
 	private static final int gyroPort = 2;
 	private AnalogGyro gyro;
 	protected RobotDrive driveTrain;
-	
 	public DriveTrain(float speedConstants){
 		for(int i =0;i<driveCimCount;i++){driveCim[i] = new Victor(i);}
 		for(int i = 0; i < driveCimCount;i++){LiveWindow.addActuator("DriveTrain", String.valueOf(i), (Victor) driveCim[i]);}
@@ -35,14 +34,19 @@ public class DriveTrain extends Subsystem{
 		driveTrain.setMaxOutput(1.0);
 		
 		
-		
 		gyro = new AnalogGyro((gyroPort));
 		if (Robot.isReal()) {
 			gyro.setSensitivity(0.007); // TODO: Handle more gracefully?
 		}
 		LiveWindow.addSensor("DriveTrain", "Gyro", gyro);
+		
 	}
 	public void initDefaultCommand(){
 	}
-
+	public float[] deltaDrive(double leftPower, double rightPower,float deltaT){
+		driveTrain.setArrayMotorOutputs(leftPower, rightPower);
+		float[] deltaD = new float[2];
+		return deltaD;
+		
+	}
 }

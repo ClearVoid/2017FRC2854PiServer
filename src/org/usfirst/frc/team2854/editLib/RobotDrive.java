@@ -132,6 +132,7 @@ public class RobotDrive implements MotorSafety {
 		}
 		return motors;
 	}
+	
 	public void stopMotor() {
 		for(int t = 0; t < motorCount; t++){
 			if(m_motors[t] != null)
@@ -558,7 +559,6 @@ public class RobotDrive implements MotorSafety {
 		m_syncGroup = syncGroup;
 	}
 
-
 	public void setExpiration(double timeout) {
 		m_safetyHelper.setExpiration(timeout);
 	}
@@ -582,8 +582,6 @@ public class RobotDrive implements MotorSafety {
 	public String getDescription() {
 		return "Robot Drive";
 	}
-
-	
 
 	private void setupMotorSafety() {
 		m_safetyHelper = new MotorSafetyHelper(this);

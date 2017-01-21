@@ -1,10 +1,14 @@
 package org.usfirst.frc.team2854.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team2854.robot.Robot;
+import org.usfirst.frc.team2854.robot.subsystems.*;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.AnalogGyro;
 
 public class Calibrate extends Command{
+	private static AnalogGyro gyro;
+	private static DriveTrain drive;
+	
 	public Calibrate(){
 		requires(Robot.tankDrive);
 	}
@@ -26,11 +30,15 @@ public class Calibrate extends Command{
 		float[] power = new float[2];
 		return power;
 	}
+	
 	protected void initialize(){
+		gyro = Robot.gyro;
+		drive = Robot.tankDrive;
 	}
 	protected void execute(){
 		
 	}
+	
 	protected boolean isFinished(){
 		return false;
 	}
