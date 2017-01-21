@@ -53,14 +53,7 @@ public class ImageUtil {
 		return dimg;
 	}
 	
-	/**
-	 * 
-	 * @param img The image
-	 * @param ratios Array of average pixel rations in the order {red/blue,  blue/green, red/green}
-	 * @param standardDevations Array of pixel ration standard deviations in the order {red/blue,  blue/green, red/green}
-	 * @param Standarderror the Z-score error. Percent Error is found by A(z) - A(-z)
-	 * @return an image with non similar colors changed to white
-	 */
+	
 	public static BufferedImage colorCut(BufferedImage img, float[] averages, float[] standardDevations, float Standarderror) {
 		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 		for(int x = 0; x < img.getWidth(); x++) {
@@ -192,6 +185,28 @@ public class ImageUtil {
 		}
 		
 		return img;
+		
+	}
+	
+	public static int[][] fillClosed(int[][] img) {
+		
+		int width = img[0].length;
+		int height = img.length;
+		
+		int[][] out = new int[height][width];
+		boolean fill = false;
+		boolean gap = false;
+		for(int y = 0; y < height;y++) {
+			fill = false;
+			for(int x = 0; x < width ; x++) {
+				if(img[y][x] == 0) {
+					fill = !fill;
+				}
+				out[y][x] = fill ? 0 : 255;
+			}
+		}
+		
+		return out;
 		
 	}
 	

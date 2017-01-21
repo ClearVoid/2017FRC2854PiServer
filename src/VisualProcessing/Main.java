@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -61,6 +62,9 @@ public class Main {
 	public static long startTime = System.nanoTime();
 	public static long deltaTime = 0;
 	public static int frames;
+	
+	public static double avgDistance;
+	public static int count;
 	
 	public static final double tanAngle =  1.333;
 	
@@ -136,12 +140,12 @@ public class Main {
 		//options.pack();
 		options.setVisible(true);
 	}
-	public static void feedProcess(float lowPass, int threshHold, float[] averages, float[] devations, float stError){
+	public static void feedProcess(float lowPass, int threshHold, float[] averages, float[] deviations, float stError){
 		//long startTime = System.nanoTime(); 
 		feedFrame = webcam.getImage();
 		//System.out.println(feedFrame.getWidth());
 		//System.out.printf("%-35s%,15d\n", "Time to get image: " , -(startTime - (startTime = System.nanoTime())));
-		feedProc = ImageUtil.colorCut(feedFrame, averages, devations, stError); 
+		feedProc = ImageUtil.colorCut(feedFrame, averages, deviations, stError); 
 		//System.out.println(bar1.getValue()/100f);
 		//System.out.printf("%-35s%,15d\n", "Time to color cut: " , -(startTime - (startTime = System.nanoTime())));
 		feedArr = ImageUtil.grayScale(feedProc);
@@ -157,14 +161,19 @@ public class Main {
 		//feedArr = EdgeThin.thin(feedArr);
 		//System.out.printf("%-35s%,15d\n","Time to thin: " , -(startTime - (startTime = System.nanoTime())) );
 		//System.out.println();
-		Point p = ImageUtil.findCenter(feedArr);
+		feedArr = ImageUtil.fillClosed(feedArr);
 		feedProc = ImageUtil.arrayToImg(feedArr);
-		feedProc = ImageUtil.resize(feedProc, feedProc.getWidth() * 2, feedProc.getHeight() * 2);
-		if(p != null) {
-			ImageUtil.drawLargePixel(feedProc, p.x * 2, p.y * 2, new Color(255, 0, 0).getRGB());
-		}
-		int[] data = ImageUtil.getDimensions(feedArr);
-		System.out.println(ImageUtil.getDistance(feedFrame.getWidth(), data[0], .29, tanAngle));
+		
+//		Point p = ImageUtil.findCenter(feedArr);
+//		feedProc = ImageUtil.arrayToImg(feedArr);
+//		feedProc = ImageUtil.resize(feedProc, feedProc.getWidth() * 2, feedProc.getHeight() * 2);
+//		if(p != null) {
+//			ImageUtil.drawLargePixel(feedProc, p.x * 2, p.y * 2, new Color(255, 0, 0).getRGB());
+//		}
+//		int[] data = ImageUtil.getDimensions(feedArr);
+//		double distance = ImageUtil.getDistance(feedFrame.getWidth(), data[0], .29, tanAngle);
+//		System.out.println(distance);
+		
 		g.drawImage(feedProc, 0, 0, feedProc.getWidth(), feedProc.getHeight(), null);
 		g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
 		
@@ -185,8 +194,8 @@ public class Main {
 		float stError = 3;
 	
 		
-		final float[] ratios = new float[] {90.74f, 137.64f, 176.23f};
-		 float[] devations = new float[] {17f, 17f, 14f};
+		final float[] ratios = new float[] {100.61f, 249.74f, 167.53f};
+		 float[] deviations = new float[] {9.25f, 8.71f, 13.84f};
 		
 		while(true) {
 
@@ -205,7 +214,7 @@ public class Main {
 			
 			
 			
-			feedProcess(lowPass,threshHold, ratios, devations, stError);
+			feedProcess(lowPass,threshHold, ratios, deviations, stError);
 			
 			if(deltaTime >= 1000000000l) {
 				System.out.println("FPS: " + 1000000000d/(double)(startTime - lastTime)); 
