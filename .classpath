@@ -6,8 +6,12 @@
 	<classpathentry kind="lib" path="libraries/slf4j-api-1.7.2.jar"/>
 	<classpathentry kind="lib" path="libraries/webcam-capture-0.3.10.jar"/>
 	<classpathentry kind="lib" path="libraries/WPILib.jar"/>
-	<classpathentry kind="var" path="networktables" sourcepath="networktables.sources"/>
-	<classpathentry kind="var" path="opencv" sourcepath="opencv.sources"/>
-	<classpathentry kind="var" path="cscore" sourcepath="cscore.sources"/>
+	<classpathentry kind="lib" path="libraries/cscore-sources.jar"/>
+	<classpathentry kind="lib" path="libraries/cscore.jar"/>
+	<classpathentry kind="lib" path="libraries/NetworkTables-sources.jar"/>
+	<classpathentry kind="lib" path="libraries/NetworkTables.jar"/>
+	<classpathentry kind="lib" path="libraries/opencv-sources.jar"/>
+	<classpathentry kind="lib" path="libraries/opencv.jar"/>
+	<classpathentry kind="lib" path="libraries/WPILib-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
