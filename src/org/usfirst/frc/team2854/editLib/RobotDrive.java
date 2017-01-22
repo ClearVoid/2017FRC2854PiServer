@@ -97,10 +97,6 @@ public class RobotDrive implements MotorSafety {
 			m_motors[t].set(-limit(rightOutput) * m_maxOutput);
 		}
 
-		if (this.m_syncGroup != 0) {
-			CANJaguar.updateSyncGroup(m_syncGroup);
-		}
-
 		if (m_safetyHelper != null)
 			m_safetyHelper.feed();
 	}
@@ -536,10 +532,11 @@ public class RobotDrive implements MotorSafety {
 		wheelSpeeds[MotorType.kRearRight.value] = xIn + yIn - rotation;
 
 		normalize(wheelSpeeds);
-		m_frontLeftMotor.set(wheelSpeeds[MotorType.kFrontLeft.value] * m_maxOutput);
-		m_frontRightMotor.set(wheelSpeeds[MotorType.kFrontRight.value] * m_maxOutput);
-		m_rearLeftMotor.set(wheelSpeeds[MotorType.kRearLeft.value] * m_maxOutput);
-		m_rearRightMotor.set(wheelSpeeds[MotorType.kRearRight.value] * m_maxOutput);
+		
+		m_motors[0].set(wheelSpeeds[MotorType.kFrontLeft.value] * m_maxOutput);
+		m_motors[1].set(wheelSpeeds[MotorType.kFrontRight.value] * m_maxOutput);
+		m_motors[2].set(wheelSpeeds[MotorType.kRearLeft.value] * m_maxOutput);
+		m_motors[3].set(wheelSpeeds[MotorType.kRearRight.value] * m_maxOutput);
 
 		if (m_safetyHelper != null) {
 			m_safetyHelper.feed();
@@ -583,11 +580,11 @@ public class RobotDrive implements MotorSafety {
 		wheelSpeeds[MotorType.kRearRight.value] = (sinD * magnitude - rotation);
 
 		normalize(wheelSpeeds);
-
-		m_frontLeftMotor.set(wheelSpeeds[MotorType.kFrontLeft.value] * m_maxOutput);
-		m_frontRightMotor.set(wheelSpeeds[MotorType.kFrontRight.value] * m_maxOutput);
-		m_rearLeftMotor.set(wheelSpeeds[MotorType.kRearLeft.value] * m_maxOutput);
-		m_rearRightMotor.set(wheelSpeeds[MotorType.kRearRight.value] * m_maxOutput);
+		
+		m_motors[0].set(wheelSpeeds[MotorType.kFrontLeft.value] * m_maxOutput);
+		m_motors[1].set(wheelSpeeds[MotorType.kFrontRight.value] * m_maxOutput);
+		m_motors[2].set(wheelSpeeds[MotorType.kRearLeft.value] * m_maxOutput);
+		m_motors[3].set(wheelSpeeds[MotorType.kRearRight.value] * m_maxOutput);
 
 		if (m_safetyHelper != null) {
 			m_safetyHelper.feed();
