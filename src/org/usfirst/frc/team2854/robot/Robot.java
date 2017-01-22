@@ -23,7 +23,7 @@ public class Robot extends IterativeRobot {
 	int stickCount = 2;
 	int stickPorts[] = {0,1};
 	private Joystick stick[] = new Joystick[stickCount];//stick[0] would be the teleop, and stick[1] would be something else I suppose?
-	public static final DriveTrain tankDrive = new DriveTrain(1);
+	public static final DriveTrain tankDrive = new DriveTrain();
 	public static OI oi;
 	public static int gyroPort = 2;
 	public static AnalogGyro gyro;

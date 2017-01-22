@@ -23,7 +23,7 @@ public class DriveTrain extends Subsystem{
 	private static final int gyroPort = 2;
 	private AnalogGyro gyro;
 	protected RobotDrive driveTrain;
-	public DriveTrain(float speedConstants){
+	public DriveTrain(){
 		for(int i =0;i<driveCimCount;i++){driveCim[i] = new Victor(i);}
 		for(int i = 0; i < driveCimCount;i++){LiveWindow.addActuator("DriveTrain", String.valueOf(i), (Victor) driveCim[i]);}
 		

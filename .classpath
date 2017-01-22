@@ -3,15 +3,15 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="libraries/bridj-0.6.2.jar"/>
-	<classpathentry kind="lib" path="libraries/slf4j-api-1.7.2.jar"/>
-	<classpathentry kind="lib" path="libraries/webcam-capture-0.3.10.jar"/>
-	<classpathentry kind="lib" path="libraries/WPILib.jar"/>
 	<classpathentry kind="lib" path="libraries/cscore-sources.jar"/>
 	<classpathentry kind="lib" path="libraries/cscore.jar"/>
 	<classpathentry kind="lib" path="libraries/NetworkTables-sources.jar"/>
 	<classpathentry kind="lib" path="libraries/NetworkTables.jar"/>
 	<classpathentry kind="lib" path="libraries/opencv-sources.jar"/>
 	<classpathentry kind="lib" path="libraries/opencv.jar"/>
+	<classpathentry kind="lib" path="libraries/slf4j-api-1.7.2.jar"/>
+	<classpathentry kind="lib" path="libraries/webcam-capture-0.3.10.jar"/>
 	<classpathentry kind="lib" path="libraries/WPILib-sources.jar"/>
+	<classpathentry kind="lib" path="libraries/WPILib.jar" sourcepath="libraries/WPILib-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
