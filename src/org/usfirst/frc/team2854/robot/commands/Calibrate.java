@@ -10,7 +10,7 @@ public class Calibrate extends Command{
 	private static DriveTrain drive;
 	
 	public Calibrate(){
-		requires(Robot.tankDrive);
+		requires(Robot.driveTrain);
 	}
 	private static float[] limit(float[] input){
 		float ratio;
@@ -26,6 +26,9 @@ public class Calibrate extends Command{
 		}
 		return input;
 	}
+	private static void deltaDrive(){
+		
+	}
 	public float[] run(){
 		float[] power = new float[2];
 		return power;
@@ -33,7 +36,7 @@ public class Calibrate extends Command{
 	
 	protected void initialize(){
 		gyro = Robot.gyro;
-		drive = Robot.tankDrive;
+		drive = Robot.driveTrain;
 	}
 	protected void execute(){
 		

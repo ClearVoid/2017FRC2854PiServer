@@ -20,14 +20,17 @@ import edu.wpi.first.wpilibj.AnalogGyro;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	int stickCount = 2;
+	//ports
 	int stickPorts[] = {0,1};
-	private Joystick stick[] = new Joystick[stickCount];//stick[0] would be the teleop, and stick[1] would be something else I suppose?
-	public static final DriveTrain tankDrive = new DriveTrain();
-	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
-	public static OI oi;
 	public static int gyroPort = 2;
+	//Things
+	private static int stickCount = 2;
+	public static Joystick stick[] = new Joystick[stickCount];//stick[0] would be the teleop, and stick[1] would be something else I suppose?
+	public static OI oi;
 	public static AnalogGyro gyro;
+	//subsystems
+	public static DriveTrain driveTrain;
+	public static ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	
     Command autonomousCommand;
     SendableChooser chooser;
@@ -39,7 +42,11 @@ public class Robot extends IterativeRobot {
 //      chooser.addObject("My Auto", new MyAutoCommand());
     	SmartDashboard.putData("Auto mode", chooser);
     	for(int i = 0; i < stickCount; i++){stick[i] = new Joystick(stickPorts[i]);}
+    	
+    	
     	gyro = new AnalogGyro(gyroPort);
+    	
+    	driveTrain = new DriveTrain();
     }
 	
     public void disabledInit(){
@@ -89,11 +96,8 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-        if (autonomousCommand != null) autonomousCommand.cancel();
-        
-        
+        if (autonomousCommand != null) autonomousCommand.cancel();  
     }
-
     public void teleopPeriodic(){
         Scheduler.getInstance().run();
     }
