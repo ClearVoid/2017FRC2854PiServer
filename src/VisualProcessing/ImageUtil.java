@@ -195,6 +195,10 @@ public class ImageUtil {
 	}
 	
 	public static int[][] fillClosed(int[][] img) {
+		return fillClosed(img, true);
+	}
+	
+	private static int[][] fillClosed(int[][] img, boolean firstRun) {
 		
 		int width = img[0].length;
 		int height = img.length;
@@ -261,9 +265,11 @@ public class ImageUtil {
 		}
 		
 
-		
-		return out;
-		
+		if(firstRun) {
+			return fillClosed(out, false);
+		} else {
+			return out;
+		}
 	}
 	
 
