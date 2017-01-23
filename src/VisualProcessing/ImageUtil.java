@@ -106,6 +106,12 @@ public class ImageUtil {
 		}
 		return out;
 	}
+	
+	public static void showImage(BufferedImage... imgs) {
+		for(BufferedImage img:imgs) {
+			showImage(img);
+		}
+	}
 
 	public static void showImage(BufferedImage img) {
 		showImage(img, "");
@@ -194,17 +200,67 @@ public class ImageUtil {
 		int height = img.length;
 		
 		int[][] out = new int[height][width];
+		
 		boolean fill = false;
 		boolean gap = false;
+		boolean edge = false;
+		
 		for(int y = 0; y < height;y++) {
 			fill = false;
+			edge = false;
+			gap = false;
 			for(int x = 0; x < width ; x++) {
-				if(img[y][x] == 0) {
-					fill = !fill;
+				if(fill && img[y][x] == 255) {
+					gap = true;
 				}
-				out[y][x] = fill ? 0 : 255;
+				if(img[y][x] == 255 && edge){
+					fill = false;
+					edge = false;
+					gap = false;
+				}
+				if(img[y][x] == 0) {
+					if(gap) {
+						edge = true;
+					}  else if(!fill) {
+						fill = true;
+					} 
+				}
+				if(y == 33) {
+					System.out.println(new Point(x,y).toString() + " Gap: " + gap + " Fill: " + fill + " Edge: " + edge);
+				}
+				out[y][x] = fill ? 1 : 255;
 			}
 		}
+		
+		for(int x = 0; x < width ; x++) {
+			fill = false;
+			edge = false;
+			gap = false;
+			for(int y = 0; y < height;y++) {
+
+				if(fill && img[y][x] == 255) {
+					gap = true;
+				} 
+				if(img[y][x] == 255 && edge){
+					fill = false;
+					edge = false;
+					gap = false;
+				}
+				if(img[y][x] == 0) {
+					if(gap) {
+						edge = true;
+					}  else if(!fill) {
+						fill = true;
+					} 
+				}
+				if(y == 34) {
+					//	System.out.println(new Point(x,y).toString() + " Gap: " + gap + " Fill: " + fill);
+				}
+				out[y][x] = (fill && out[y][x] == 1) ? 0 : 255;
+			}
+		}
+		
+
 		
 		return out;
 		

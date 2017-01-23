@@ -5,8 +5,6 @@
 	<classpathentry kind="lib" path="libraries/bridj-0.6.2.jar"/>
 	<classpathentry kind="lib" path="libraries/slf4j-api-1.7.2.jar"/>
 	<classpathentry kind="lib" path="libraries/webcam-capture-0.3.10.jar"/>
-	<classpathentry kind="lib" path="C:/Users/palanikevin1646/Desktop/Eclipse/libraries/marvin/lib/junit-4.7.jar"/>
-	<classpathentry kind="lib" path="C:/Users/palanikevin1646/Desktop/Eclipse/libraries/marvin/framework/marvin_1.5.5.jar"/>
 	<classpathentry kind="lib" path="libraries/org.marvinproject.image.segmentation.floodfillSegmentation.jar"/>
 	<classpathentry kind="var" path="wpilib" sourcepath="wpilib.sources"/>
 	<classpathentry kind="var" path="networktables" sourcepath="networktables.sources"/>
