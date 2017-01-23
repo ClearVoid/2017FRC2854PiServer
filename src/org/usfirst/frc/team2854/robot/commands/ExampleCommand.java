@@ -1,31 +1,42 @@
-
 package org.usfirst.frc.team2854.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+
 import org.usfirst.frc.team2854.robot.Robot;
 
 /**
  *
  */
 public class ExampleCommand extends Command {
+	public ExampleCommand() {
+		// Use requires() here to declare subsystem dependencies
+		requires(Robot.exampleSubsystem);
+	}
 
-    public ExampleCommand() {
-        // Use requires() here to declare subsystem dependencies
-        requires(Robot.exampleSubsystem);
-    }
-    protected void initialize(){
-		
+	// Called just before this Command runs the first time
+	@Override
+	protected void initialize() {
 	}
-	protected void execute(){
-		
+
+	// Called repeatedly when this Command is scheduled to run
+	@Override
+	protected void execute() {
 	}
-	protected boolean isFinished(){
+
+	// Make this return true when this Command no longer needs to run execute()
+	@Override
+	protected boolean isFinished() {
 		return false;
 	}
-	protected void end(){
-		
+
+	// Called once after isFinished returns true
+	@Override
+	protected void end() {
 	}
-	protected void interrupted(){
-		System.out.println("ERROR: INTERRUPTED");
+
+	// Called when another command which requires one or more of the same
+	// subsystems is scheduled to run
+	@Override
+	protected void interrupted() {
 	}
 }

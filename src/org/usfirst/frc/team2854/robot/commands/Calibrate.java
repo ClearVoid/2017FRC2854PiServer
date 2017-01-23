@@ -1,12 +1,16 @@
 package org.usfirst.frc.team2854.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team2854.robot.Robot;
+import org.usfirst.frc.team2854.robot.subsystems.*;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.AnalogGyro;
 
 public class Calibrate extends Command{
+	private static AnalogGyro gyro;
+	private static DriveTrain drive;
+	
 	public Calibrate(){
-		requires(Robot.tankDrive);
+		requires(Robot.driveTrain);
 	}
 	private static float[] limit(float[] input){
 		float ratio;
@@ -22,15 +26,22 @@ public class Calibrate extends Command{
 		}
 		return input;
 	}
+	private static void deltaDrive(){
+		
+	}
 	public float[] run(){
 		float[] power = new float[2];
 		return power;
 	}
+	
 	protected void initialize(){
+		gyro = Robot.gyro;
+		drive = Robot.driveTrain;
 	}
 	protected void execute(){
 		
 	}
+	
 	protected boolean isFinished(){
 		return false;
 	}
