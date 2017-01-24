@@ -194,12 +194,13 @@ public class ImageUtil {
 		
 	}
 	
+
 	public static int[][] fillClosed(int[][] img) {
-		return fillClosed(img, true);
+		return fillClosed(img, 0);
 	}
 	
-	private static int[][] fillClosed(int[][] img, boolean firstRun) {
-		
+	public static int[][] fillClosed(int[][] img, int depth) {
+
 		int width = img[0].length;
 		int height = img.length;
 		
@@ -230,7 +231,7 @@ public class ImageUtil {
 					} 
 				}
 				if(y == 33) {
-					System.out.println(new Point(x,y).toString() + " Gap: " + gap + " Fill: " + fill + " Edge: " + edge);
+					//System.out.println(new Point(x,y).toString() + " Gap: " + gap + " Fill: " + fill + " Edge: " + edge);
 				}
 				out[y][x] = fill ? 1 : 255;
 			}
@@ -260,13 +261,17 @@ public class ImageUtil {
 				if(y == 34) {
 					//	System.out.println(new Point(x,y).toString() + " Gap: " + gap + " Fill: " + fill);
 				}
+				
+
 				out[y][x] = (fill && out[y][x] == 1) ? 0 : 255;
+				
 			}
 		}
 		
 
-		if(firstRun) {
-			return fillClosed(out, false);
+		if(Arrays.deepHashCode(img) != Arrays.deepHashCode(out)) {	
+			//ImageUtil.showImage(ImageUtil.arrayToImg(out), ++depth + "");
+			return fillClosed(out, depth);
 		} else {
 			return out;
 		}

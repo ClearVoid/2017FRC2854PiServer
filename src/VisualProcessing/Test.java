@@ -11,14 +11,15 @@ import javax.imageio.ImageIO;
 
 public class Test {
 
+	
 	public static void main(String[] args) throws IOException {
 		
 		BufferedImage img = ImageIO.read(new File("Test.png"));
-		
+		ImageUtil.showImage(img, "start");
 		int[][] data = ImageUtil.grayScale(img);
 		data = ImageUtil.fillClosed(data);
 		BufferedImage img2 = ImageUtil.arrayToImg(data);
-		ImageUtil.showImage(img, img2);
+		//ImageUtil.showImage(img, img2);
         
 	}
 	

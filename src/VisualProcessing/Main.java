@@ -90,7 +90,7 @@ public class Main {
 	
 		frame2.add(new JLabel(new ImageIcon(screen2)));
 		frame2.pack();
-		//frame2.setVisible(true);
+		frame2.setVisible(true);
 		
 		
 		BufferedImage screen1 = new BufferedImage(feedFrame.getWidth(), feedFrame.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
@@ -164,18 +164,16 @@ public class Main {
 		feedArr = ImageUtil.fillClosed(feedArr);
 		feedProc = ImageUtil.arrayToImg(feedArr);
 		
-//		Point p = ImageUtil.findCenter(feedArr);
-//		feedProc = ImageUtil.arrayToImg(feedArr);
-//		feedProc = ImageUtil.resize(feedProc, feedProc.getWidth() * 2, feedProc.getHeight() * 2);
-//		if(p != null) {
-//			ImageUtil.drawLargePixel(feedProc, p.x * 2, p.y * 2, new Color(255, 0, 0).getRGB());
-//		}
-//		int[] data = ImageUtil.getDimensions(feedArr);
-//		double distance = ImageUtil.getDistance(feedFrame.getWidth(), data[0], .29, tanAngle);
-//		System.out.println(distance);
+		Point p = ImageUtil.findCenter(feedArr);
+
+		int[][][] splitImages = ImageUtil.splitImage(feedArr, p, true);
 		
-		g.drawImage(feedProc, 0, 0, feedProc.getWidth(), feedProc.getHeight(), null);
+		BufferedImage imgLeft = ImageUtil.arrayToImg(splitImages[0]);
+		BufferedImage imgRight = ImageUtil.arrayToImg(splitImages[1]);
+		
+		g.drawImage(imgLeft, 0, 0, imgLeft.getWidth(), imgLeft.getHeight(), null);
 		g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
+		g2.drawImage(imgRight, 0, 0, imgRight.getWidth(), imgRight.getHeight(), null);
 		
 	}
 	public static void main(String[] args) throws IOException {
@@ -194,8 +192,8 @@ public class Main {
 		float stError = 3;
 	
 		
-		final float[] ratios = new float[] {100.61f, 249.74f, 167.53f};
-		 float[] deviations = new float[] {9.25f, 8.71f, 13.84f};
+		final float[] ratios = new float[] {85.852f, 253.0721f, 217.07f};
+		 float[] deviations = new float[] {67.31f,6.61f, 49.46f};
 		
 		while(true) {
 
@@ -224,7 +222,7 @@ public class Main {
 			
 			frame.repaint();
 			frame1.repaint();
-			//frame2.repaint();
+			frame2.repaint();
 			frames++;
 			lastTime = startTime;		
 

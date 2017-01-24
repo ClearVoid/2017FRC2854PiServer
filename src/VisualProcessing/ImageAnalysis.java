@@ -9,7 +9,7 @@ public class ImageAnalysis {
 
 	public static void main(String[] args) {
 		
-		String path = "src/VisualProcessing/blueTap.png";
+		String path = "redBox.png";
 		try {
 		File file = new File(path);
 		
