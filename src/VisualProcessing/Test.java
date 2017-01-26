@@ -1,5 +1,8 @@
 package VisualProcessing;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
@@ -17,10 +20,11 @@ public class Test {
 		BufferedImage img = ImageIO.read(new File("Test.png"));
 		ImageUtil.showImage(img, "start");
 		int[][] data = ImageUtil.grayScale(img);
-		data = ImageUtil.fillClosed(data);
-		BufferedImage img2 = ImageUtil.arrayToImg(data);
-		//ImageUtil.showImage(img, img2);
-        
+		Rectangle rect = ImageUtil.calculateDimension(data, 50000000);
+        Graphics g = img.createGraphics();
+        g.setColor(Color.RED);
+        g.drawRect(rect.x, rect.y, rect.width, rect.height);
+		ImageUtil.showImage(img, "end");
 	}
 	
 }

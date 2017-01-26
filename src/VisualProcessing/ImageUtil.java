@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+
 import javax.swing.*;
 
 public class ImageUtil {
@@ -750,32 +751,62 @@ public class ImageUtil {
 		int blacks = 0;
 		for(int x = (int) rect.getX(); x < rect.getX() + rect.getWidth(); x++) {
 			for(int y = (int) rect.getY(); y < rect.getY() + rect.getHeight(); y++) {
+				try {
 				if(img[y][x] == 0) {
 					blacks++;
+				}
+				} catch (ArrayIndexOutOfBoundsException e) {
+					continue;
 				}
 			}
 		}
 		return (double)blacks/(rect.getWidth()*rect.getHeight());
 	}
+
 	
-	public static void bruteForce(int[][] img, Rectangle rect, int dierction) {
+	public static Rectangle calculateDimension(int[][] img, double constant) {
+		Point p = ImageUtil.findCenter(img);
+		
+		boolean left = false, right = false, up = false, down = false;
+		
+		Rectangle rect = new Rectangle(p.x - 1, p.y - 1, 3, 3);
+		Rectangle temp = rect;
 		
 		double lastProp = blackPerArea(img, rect);
+		double newProp;
+		boolean[] finished = new boolean[] {false, false, false, false};
+		double error;
+		do {
+		//	System.out.println(rect + " " + left + " " + right + " " + down + " " + up );
+			finished = new boolean[] {false, false, false, false};
+			int area = rect.width * rect.height;
+			error = (double)area / (area + constant);
 		
-	}
-	
-	public static Dimension calculateDimension(int[][] img) {
-		Point p = ImageUtil.findCenter(img);
-		int width = img[0].length;
-		int height = img.length;
+			for(int i = 0; i < 4; i++) {
+				
+				if((left && i==0) || (right && i==2) || (down &&i==3) || (up&&i==1)) {
+					continue;
+				}
+				
+				temp = new Rectangle(rect.x + (i==0?-1:0), rect.y + (i==1?-1:0), rect.width + (i==2?1:0), rect.height + (i==3?1:0));
+				newProp = blackPerArea(img, temp);
+				System.out.println(newProp + " " + lastProp + " " + (newProp - lastProp) + " " + finished[i] + " " + error);
+				if(newProp < lastProp - error) {
+					finished[i] = true;
+				} else {
+					rect = temp;
+					lastProp = newProp;
+					
+				}
+
+				
+			}
+			System.out.println("___");
+			
+		} while(!(finished[0] && finished[1] && finished[2] && finished[3]));
 		
-		int yUp = 1;
-		int yDown = 1;
-		int xLeft = 1;
-		int xRight = 1;
 		
-		
-		return null;
+		return rect;
 	}
 	
 	
