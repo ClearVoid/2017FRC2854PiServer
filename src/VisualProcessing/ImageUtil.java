@@ -2,10 +2,12 @@ package VisualProcessing;
 
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.List;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -741,6 +743,39 @@ public class ImageUtil {
 	
 	public static double getDistance(int screenWidth, int projectedWidth, double actualWidth, double tanAngle) {
 		return screenWidth * actualWidth / (projectedWidth * tanAngle);
+	}
+	
+	
+	public static double blackPerArea(int[][] img, Rectangle rect) {
+		int blacks = 0;
+		for(int x = (int) rect.getX(); x < rect.getX() + rect.getWidth(); x++) {
+			for(int y = (int) rect.getY(); y < rect.getY() + rect.getHeight(); y++) {
+				if(img[y][x] == 0) {
+					blacks++;
+				}
+			}
+		}
+		return (double)blacks/(rect.getWidth()*rect.getHeight());
+	}
+	
+	public static void bruteForce(int[][] img, Rectangle rect, int dierction) {
+		
+		double lastProp = blackPerArea(img, rect);
+		
+	}
+	
+	public static Dimension calculateDimension(int[][] img) {
+		Point p = ImageUtil.findCenter(img);
+		int width = img[0].length;
+		int height = img.length;
+		
+		int yUp = 1;
+		int yDown = 1;
+		int xLeft = 1;
+		int xRight = 1;
+		
+		
+		return null;
 	}
 	
 	

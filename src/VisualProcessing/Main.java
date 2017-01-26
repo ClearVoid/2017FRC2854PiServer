@@ -165,15 +165,17 @@ public class Main {
 		feedProc = ImageUtil.arrayToImg(feedArr);
 		
 		Point p = ImageUtil.findCenter(feedArr);
-
+		if(p != null) {
 		int[][][] splitImages = ImageUtil.splitImage(feedArr, p, true);
 		
 		BufferedImage imgLeft = ImageUtil.arrayToImg(splitImages[0]);
 		BufferedImage imgRight = ImageUtil.arrayToImg(splitImages[1]);
 		
 		g.drawImage(imgLeft, 0, 0, imgLeft.getWidth(), imgLeft.getHeight(), null);
-		g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
+
 		g2.drawImage(imgRight, 0, 0, imgRight.getWidth(), imgRight.getHeight(), null);
+		}
+		g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
 		
 	}
 	public static void main(String[] args) throws IOException {
@@ -192,8 +194,11 @@ public class Main {
 		float stError = 3;
 	
 		
-		final float[] ratios = new float[] {85.852f, 253.0721f, 217.07f};
+		final float[] ratios = new float[] {85.852f, 253.0721f, 217.07f};   //windows log on
 		 float[] deviations = new float[] {67.31f,6.61f, 49.46f};
+		
+ //		final float[] ratios = new float[] {85.852f, 253.0721f, 217.07f};   //blue screens
+//		 float[] deviations = new float[] {67.31f,6.61f, 49.46f};
 		
 		while(true) {
 
