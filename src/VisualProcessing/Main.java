@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
@@ -79,6 +80,7 @@ public class Main {
 		System.out.println("Initializing JFrames");
 		BufferedImage screen = new BufferedImage(feedFrame.getWidth() * 2, feedFrame.getHeight() * 2, BufferedImage.TYPE_3BYTE_BGR);
 		g = screen.createGraphics();
+		g.setColor(Color.red);
 	
 		frame.add(new JLabel(new ImageIcon(screen)));
 		frame.pack();
@@ -87,7 +89,8 @@ public class Main {
 		
 		BufferedImage screen2 = new BufferedImage(feedFrame.getWidth(), feedFrame.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 		g2 = screen2.createGraphics();
-	
+		g2.setColor(Color.red);
+		
 		frame2.add(new JLabel(new ImageIcon(screen2)));
 		frame2.pack();
 		frame2.setVisible(true);
@@ -95,7 +98,7 @@ public class Main {
 		
 		BufferedImage screen1 = new BufferedImage(feedFrame.getWidth(), feedFrame.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 		g1 = screen1.createGraphics();
-
+		g1.setColor(Color.red);
 	
 		frame1.add(new JLabel(new ImageIcon(screen1)));
 		frame1.pack();
@@ -170,10 +173,12 @@ public class Main {
 		
 		BufferedImage imgLeft = ImageUtil.arrayToImg(splitImages[0]);
 		BufferedImage imgRight = ImageUtil.arrayToImg(splitImages[1]);
-		
+		Rectangle leftRect = ImageUtil.calculateDimension(splitImages[0], 50000000);
+		Rectangle rightRect = ImageUtil.calculateDimension(splitImages[1], 50000000);
 		g.drawImage(imgLeft, 0, 0, imgLeft.getWidth(), imgLeft.getHeight(), null);
-
+		g.drawRect(leftRect.x, leftRect.y, leftRect.width, leftRect.height);
 		g2.drawImage(imgRight, 0, 0, imgRight.getWidth(), imgRight.getHeight(), null);
+		g2.drawRect(rightRect.x, rightRect.y, rightRect.width, rightRect.height);
 		}
 		g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
 		

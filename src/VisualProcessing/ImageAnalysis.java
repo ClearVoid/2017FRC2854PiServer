@@ -3,7 +3,7 @@ package VisualProcessing;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-import javax.imageio.ImageIO;
+import javax.imageio.ImageIO;//10.6.2  RanSSC
 
 public class ImageAnalysis {
 

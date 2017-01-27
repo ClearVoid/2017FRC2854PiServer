@@ -790,7 +790,7 @@ public class ImageUtil {
 				
 				temp = new Rectangle(rect.x + (i==0?-1:0), rect.y + (i==1?-1:0), rect.width + (i==2?1:0), rect.height + (i==3?1:0));
 				newProp = blackPerArea(img, temp);
-				System.out.println(newProp + " " + lastProp + " " + (newProp - lastProp) + " " + finished[i] + " " + error);
+				//System.out.println(newProp + " " + lastProp + " " + (newProp - lastProp) + " " + finished[i] + " " + error);
 				if(newProp < lastProp - error) {
 					finished[i] = true;
 				} else {
@@ -801,7 +801,7 @@ public class ImageUtil {
 
 				
 			}
-			System.out.println("___");
+		//	System.out.println("___");
 			
 		} while(!(finished[0] && finished[1] && finished[2] && finished[3]));
 		
