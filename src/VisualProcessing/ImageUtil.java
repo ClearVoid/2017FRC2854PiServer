@@ -764,51 +764,12 @@ public class ImageUtil {
 	}
 
 	
-	public static Rectangle calculateDimension(int[][] img, double constant) {
-		Point p = ImageUtil.findCenter(img);
-		
-		boolean left = false, right = false, up = false, down = false;
-		
-		Rectangle rect = new Rectangle(p.x - 1, p.y - 1, 3, 3);
-		Rectangle temp = rect;
-		
-		double lastProp = blackPerArea(img, rect);
-		double newProp;
-		boolean[] finished = new boolean[] {false, false, false, false};
-		double error;
-		do {
-		//	System.out.println(rect + " " + left + " " + right + " " + down + " " + up );
-			finished = new boolean[] {false, false, false, false};
-			int area = rect.width * rect.height;
-			error = (double)area / (area + constant);
-		
-			for(int i = 0; i < 4; i++) {
-				
-				if((left && i==0) || (right && i==2) || (down &&i==3) || (up&&i==1)) {
-					continue;
-				}
-				
-				temp = new Rectangle(rect.x + (i==0?-1:0), rect.y + (i==1?-1:0), rect.width + (i==2?1:0), rect.height + (i==3?1:0));
-				newProp = blackPerArea(img, temp);
-				//System.out.println(newProp + " " + lastProp + " " + (newProp - lastProp) + " " + finished[i] + " " + error);
-				if(newProp < lastProp - error) {
-					finished[i] = true;
-				} else {
-					rect = temp;
-					lastProp = newProp;
-					
-				}
+	public static Rectangle calculateDimension(int[][] img, double error) {
 
-				
-			}
-		//	System.out.println("___");
-			
-		} while(!(finished[0] && finished[1] && finished[2] && finished[3]));
 		
-		
-		return rect;
+		return null;
 	}
 	
-	
+//	Superbowl Predictions: Atlanta Falcons.
 
 }

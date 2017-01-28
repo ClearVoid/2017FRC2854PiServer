@@ -5,16 +5,29 @@ import java.io.File;
 
 import javax.imageio.ImageIO;//10.6.2  RanSSC
 
+import com.github.sarxos.webcam.Webcam;
+
 public class ImageAnalysis {
 
 	public static void main(String[] args) {
 		
 		String path = "redBox.png";
+		boolean takeNewPic = true;
 		try {
 		File file = new File(path);
-		
-		BufferedImage img = ImageIO.read(file);
-		
+		BufferedImage img;
+		if(takeNewPic) {
+			Webcam cam = Webcam.getDefault();
+			cam.open();
+			img = cam.getImage();
+		} else {
+			img = ImageIO.read(file);
+		}
+		File f = new File("cameraPic.png");
+		if(!f.exists()) {
+			f.createNewFile();
+		}
+		ImageIO.write(img, "png", f);
 		double redAvg = 0;
 		double greenAvg = 0;
 		double blueAvg = 0;
