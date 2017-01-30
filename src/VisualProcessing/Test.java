@@ -16,11 +16,11 @@ public class Test {
 
 	
 	public static void main(String[] args) throws IOException {
-		
+		System.out.println("Running");
 		BufferedImage img = ImageIO.read(new File("Test.png"));
 		ImageUtil.showImage(img, "start");
 		int[][] data = ImageUtil.grayScale(img);
-		Rectangle rect = ImageUtil.calculateDimension(data, 5000000/1);
+		Rectangle rect = ImageUtil.calculateDimension(data, .5); 
         Graphics g = img.createGraphics();
         g.setColor(Color.RED);
         g.drawRect(rect.x, rect.y, rect.width, rect.height);
