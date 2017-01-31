@@ -12,7 +12,7 @@ public class ImageAnalysis {
 	public static void main(String[] args) {
 		
 		String path = "redBox.png";
-		boolean takeNewPic = true;
+		boolean takeNewPic = false;
 		try {
 		File file = new File(path);
 		BufferedImage img;

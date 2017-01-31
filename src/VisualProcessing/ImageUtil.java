@@ -16,6 +16,8 @@ import java.util.LinkedList;
 
 import javax.swing.*;
 
+import com.sun.prism.image.Coords;
+
 public class ImageUtil {
 
 	public static int[][] grayScale(BufferedImage img) {
@@ -733,31 +735,14 @@ public class ImageUtil {
 
 	/**
 	 * 
-	 * @return {width, leftHeight, rightHeight}
+	 * @return {width, height}
 	 */
-	public static int[] getDimensions(int[][] img) {
-		Point p = ImageUtil.findCenter(img);
-		// System.out.println(p);
-		if (p == null) {
-			return new int[] { -1, -1, -1 };
-		}
-		// int[][][] split = ImageUtil.splitImage(data, p, false);
-		int[] width1 = ImageUtil.findImageMaxX(img, p, true);
-		int[] width2 = ImageUtil.findImageMaxX(img, p, false);
-		int avgWidth1 = (width1[0] + width1[1]) / 2;
-		int avgWidth2 = (width2[0] + width2[1]) / 2;
-		int width = (avgWidth1 + avgWidth2);
-
-		int rightHeight = ImageUtil.findImageMaxY(img, new Point(p.x
-				+ avgWidth1, p.y), true)
-				+ ImageUtil.findImageMaxY(img, new Point(p.x + avgWidth1, p.y),
-						false);
-
-		int leftHeight = ImageUtil.findImageMaxY(img, new Point(
-				p.x - avgWidth2, p.y), true)
-				+ ImageUtil.findImageMaxY(img, new Point(p.x - avgWidth2, p.y),
-						false);
-		return new int[] { width, leftHeight, rightHeight };
+	public static double[] getDimensions(Rectangle selection, double[] size, double[] focals ) {
+		
+		double width = size[0] * focals[0] / selection.getWidth();
+		double height= size[1] * focals[1] / selection.getHeight();
+		return new double[]{width, height};
+		
 	}
 
 	public static int findImageMaxY(int[][] img, Point center, boolean up) {
@@ -810,6 +795,9 @@ public class ImageUtil {
 	public static Rectangle calculateDimension(int[][] img, double error) {
 
 		Point center = ImageUtil.findCenter(img);
+		if(center == null) {
+			return null;
+		}
 		Point topLeft = new Point(center.x - 1, center.y - 1);
 		Point botRight = new Point(center.x + 1, center.y + 1);
 		boolean hasChanged = true;
@@ -822,7 +810,7 @@ public class ImageUtil {
 					blacks += (img[topLeft.y - 1][x] == 0) ? 1 : 0;
 				}
 				blacks /= (botRight.x - topLeft.x);
-				System.out.println(blacks);
+			//	System.out.println(blacks);
 				if (blacks >= error) {
 					hasChanged = true;
 					topLeft.translate(0, -1);

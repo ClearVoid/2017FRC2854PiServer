@@ -62,6 +62,11 @@ public class Main {
 	public static int count;
 
 	public static final double tanAngle = 1.333;
+	
+	private static final double[] focals = new double[] {177.31, 211.75};
+	private static final double[] imagesize = new double[] {27.4, 30.75};
+	//27.4
+	//30.75
 
 	public static void webcamInit() {
 		System.out.println("Initializing Webcam");
@@ -181,12 +186,14 @@ public class Main {
 
 			BufferedImage imgLeft = ImageUtil.arrayToImg(splitImages[0]);
 			BufferedImage imgRight = ImageUtil.arrayToImg(splitImages[1]);
-			Rectangle leftRect = ImageUtil.calculateDimension(splitImages[0], 1);
-			Rectangle rightRect = ImageUtil.calculateDimension(splitImages[1], 1);
+			Rectangle leftRect = ImageUtil.calculateDimension(splitImages[0], .5f);
+			Rectangle rightRect = ImageUtil.calculateDimension(splitImages[1], .5f);
 
 			g.drawImage(imgLeft, 0, 0, imgLeft.getWidth(), imgLeft.getHeight(), null);
 			if (leftRect != null) {
 				g.drawRect(leftRect.x, leftRect.y, leftRect.width, leftRect.height);
+
+				System.out.println(Arrays.toString(ImageUtil.getDimensions(leftRect, imagesize, focals)));
 			}
 
 			g2.drawImage(imgRight, 0, 0, imgRight.getWidth(), imgRight.getHeight(), null);
@@ -215,10 +222,10 @@ public class Main {
 			int threshHold = 34;
 			float stError = 3;
 
-			final float[] ratios = new float[] { 85.852f, 253.0721f, 217.07f }; // windows
+			final float[] ratios = new float[] { 170.51f, 250.748f, 250.8337f }; // windows
 																				// log
 																				// on
-			float[] deviations = new float[] { 67.31f, 6.61f, 49.46f };
+			float[] deviations = new float[] { 65.42f, 4.311f, 13.71f };
 
 			// final float[] ratios = new float[] {85.852f, 253.0721f, 217.07f};
 			// //blue screens
@@ -246,8 +253,11 @@ public class Main {
 				}
 
 				frame.repaint();
+				frame.pack();
 				frame1.repaint();
+				frame1.pack();
 				frame2.repaint();
+				frame2.pack();
 				frames++;
 				lastTime = startTime;
 			}
