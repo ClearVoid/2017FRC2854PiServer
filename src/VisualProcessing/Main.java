@@ -147,53 +147,52 @@ public class Main {
 		// options.pack();
 		options.setVisible(true);
 	}
-
+	
 	public static void feedProcess(float lowPass, int threshHold, float[] averages, float[] deviations, float stError) {
 		// long startTime = System.nanoTime();
 		feedFrame = webcam.getImage();
 		// System.out.println(feedFrame.getWidth());
 		// System.out.printf("%-35s%,15d\n", "Time to get image: " , -(startTime
 		// - (startTime = System.nanoTime())));
-		feedProc = ImageUtil.colorCut(feedFrame, averages, deviations, stError);
+		feedProc = featureDetection.colorCut(feedFrame, averages, deviations, stError);
 		// System.out.println(bar1.getValue()/100f);
 		// System.out.printf("%-35s%,15d\n", "Time to color cut: " , -(startTime
 		// - (startTime = System.nanoTime())));
-		feedArr = ImageUtil.grayScale(feedProc);
+		feedArr = FundUtil.grayScale(feedProc);
 		// System.out.printf("%-35s%,15d\n","Time to grayScale: " , -(startTime
 		// - (startTime = System.nanoTime())) );
-		feedArr = ImageUtil.lowPass(feedArr, lowPass);
+		feedArr = ImageNoise.lowPass(feedArr, lowPass);
 		// System.out.printf("%-35s%,15d\n","Time to low pass: " , -(startTime -
 		// (startTime = System.nanoTime())) );
-		feedArr = ImageUtil.singleBandEdgeDetection(feedArr);
+		feedArr = featureDetection.edgeDetection(feedArr);
 		// System.out.printf("%-35s%,15d\n","Time to edge detect: " ,
 		// -(startTime - (startTime = System.nanoTime())) );
-		feedArr = ImageUtil.threshHold(feedArr, threshHold);
-		// System.out.printf("%-35s%,15d\n","Time to thresh hold: " ,
+		feedArr = FundUtil.threshHold(feedArr, threshHold);
+		// System.out.printf("%-35s%,15d\n","Time to thrilled: " ,
 		// -(startTime - (startTime = System.nanoTime())) );
-		feedArr = ImageUtil.invert(feedArr);
+		feedArr = FundUtil.invert(feedArr);
 		// System.out.printf("%-35s%,15d\n","Time to invert: " , -(startTime -
 		// (startTime = System.nanoTime())) );
 		// feedArr = EdgeThin.thin(feedArr);
 		// System.out.printf("%-35s%,15d\n","Time to thin: " , -(startTime -
 		// (startTime = System.nanoTime())) );
 		// System.out.println();
-		feedArr = ImageUtil.fillClosed(feedArr);
+		feedArr = featureDetection.fillClosed(feedArr);
 		feedProc = ImageUtil.arrayToImg(feedArr);
 
-		Point p = ImageUtil.findCenter(feedArr);
+		Point p = ImageAnalysis.findCenter(feedArr);
 		if (p != null && p.x != 0) {
-			int[][][] splitImages = ImageUtil.splitImage(feedArr, p, true);
+			int[][][] splitImages = ImageTransform.splitImage(feedArr, p, true);
 
 			BufferedImage imgLeft = ImageUtil.arrayToImg(splitImages[0]);
 			BufferedImage imgRight = ImageUtil.arrayToImg(splitImages[1]);
-			Rectangle leftRect = ImageUtil.calculateDimension(splitImages[0], .5f);
-			Rectangle rightRect = ImageUtil.calculateDimension(splitImages[1], .5f);
-
+			Rectangle leftRect = ImageAnalysis.getRect(splitImages[0], .5f);
+			Rectangle rightRect = ImageAnalysis.getRect(splitImages[1], .5f);
 			g.drawImage(imgLeft, 0, 0, imgLeft.getWidth(), imgLeft.getHeight(), null);
 			if (leftRect != null) {
 				g.drawRect(leftRect.x, leftRect.y, leftRect.width, leftRect.height);
 
-				System.out.println(Arrays.toString(ImageUtil.getDimensions(leftRect, imagesize, focals)));
+				System.out.println(Arrays.toString(VisualMath.getDimensions(leftRect, imagesize, focals)));
 			}
 
 			g2.drawImage(imgRight, 0, 0, imgRight.getWidth(), imgRight.getHeight(), null);
@@ -203,12 +202,13 @@ public class Main {
 		} else {
 			g.drawImage(feedProc, 0, 0, feedProc.getWidth(), feedProc.getHeight(), null);
 		}
-		g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
+			g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(), feedFrame.getHeight(), null);
 
 	}
 
 	public static void main(String[] args) {
 		try {
+			
 			webcamInit();
 			JFrameInit();
 			EdgeThin.init();

@@ -40,7 +40,6 @@ public class ImageUtil {
 			img.setRGB(x, y + 1, rgb);
 			img.setRGB(x, y - 1, rgb);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			return;
 		}
 	}
 

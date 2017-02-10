@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
  * This class does operations on an image that repeat the same operation on every pixel, and only considers that pixel
  *
  */
-public class ImageSinglePoint {
+public class FundUtil {
 
 	/**
 	 * Inverts a binary Image. Swaps black to white and white to black

@@ -3,7 +3,7 @@ package VisualProcessing;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-public class imageNoise {
+public class ImageNoise {
 
 	private static int[][] lowPassX(int[][] img, float smoothing) {
 		int value = img[0][0];

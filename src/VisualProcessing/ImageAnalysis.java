@@ -23,6 +23,7 @@ public class ImageAnalysis {
 	public static int[] findImageMaxX(int[][] img, Point center, boolean right) {
 
 		return findImageMaxX(img, center, 0, right, false, new int[2]);
+		
 	}
 
 	private static int[] findImageMaxX(int[][] img, Point center, int width,
@@ -60,6 +61,7 @@ public class ImageAnalysis {
 	 * index 0 is the distance to the inner edge, index 1 is the distance to the outer edge
 	 * <br> {-1, -1, -1} is returned if the edge of the image was hit
 	 */
+	
 	private static int findImageMaxY(int[][] img, Point center, int height,
 			boolean up) {
 
@@ -80,10 +82,10 @@ public class ImageAnalysis {
 	 * Trys to fit a rectangle to an image by recursively making it bigger
 	 * @param img The image to fit
 	 * @param error The percent of black pixels allowed to extend rectangle
-	 * @return A rectangle representing the boundries of a rectangle
+	 * @return A rectangle representing the boundaries of a rectangle
 	 */
-	public static Rectangle calculateDimension(int[][] img, double error) {
-		
+	
+	public static Rectangle getRect(int[][] img, double error) {
 		Point center = findCenter(img);
 		if(center == null) {
 			return null;
@@ -100,12 +102,13 @@ public class ImageAnalysis {
 					blacks += (img[topLeft.y - 1][x] == 0) ? 1 : 0;
 				}
 				blacks /= (botRight.x - topLeft.x);
-			//	System.out.println(blacks);
+				 // System.out.println(blacks);
 				if (blacks >= error) {
 					hasChanged = true;
 					topLeft.translate(0, -1);
 				}
 			} catch (ArrayIndexOutOfBoundsException e) {
+				System.out.println("Error ArrayIndexOutOfBoundsException at line 110 in Image Analysis");
 			}
 
 			try { // down
@@ -178,9 +181,9 @@ public class ImageAnalysis {
 			}
 		}
 
-		if (total == 0) {
+		if (total == 0)
 			return null;
-		}
+		
 		xAvg /= total;
 		yAvg /= total;
 
