@@ -63,8 +63,8 @@ public class Main {
 
 	public static final double tanAngle = 1.333;
 	
-	private static final double[] focals = new double[] {177.31, 211.75};
-	private static final double[] imagesize = new double[] {27.4, 30.75};
+	private static final double[] focals = new double[] {200.6, 221.84};
+	private static final double[] imageSize = new double[] {5, 12.5};
 	//27.4
 	//30.75
 
@@ -120,8 +120,8 @@ public class Main {
 		label3.setText("ThreshHold: ");
 		label3.setLabelFor(bar3);
 
-		bar1.setMaximum(500);
-		bar1.setValue((int) (2.12 * 50));
+		bar1.setMaximum(5000);
+		bar1.setValue((int) (9.7 * 50));
 		bar1.setMinimum(1);
 		bar1.setPaintLabels(true);
 		bar2.setMaximum(500);
@@ -148,19 +148,23 @@ public class Main {
 		options.setVisible(true);
 	}
 	
-	public static void feedProcess(float lowPass, int threshHold, float[] averages, float[] deviations, float stError) {
+	public static void feedProcess(float lowPass, int threshHold, float[] averages, float[] deviations, float stError) throws InterruptedException {
 		// long startTime = System.nanoTime();
 		feedFrame = webcam.getImage();
 		// System.out.println(feedFrame.getWidth());
 		// System.out.printf("%-35s%,15d\n", "Time to get image: " , -(startTime
 		// - (startTime = System.nanoTime())));
 		feedProc = featureDetection.colorCut(feedFrame, averages, deviations, stError);
+
 		// System.out.println(bar1.getValue()/100f);
 		// System.out.printf("%-35s%,15d\n", "Time to color cut: " , -(startTime
 		// - (startTime = System.nanoTime())));
 		feedArr = FundUtil.grayScale(feedProc);
 		// System.out.printf("%-35s%,15d\n","Time to grayScale: " , -(startTime
 		// - (startTime = System.nanoTime())) );
+		//ImageUtil.showImage(ImageUtil.arrayToImg(feedArr), "bleh");
+		//Thread.sleep(100000);
+		
 		feedArr = ImageNoise.lowPass(feedArr, lowPass);
 		// System.out.printf("%-35s%,15d\n","Time to low pass: " , -(startTime -
 		// (startTime = System.nanoTime())) );
@@ -178,6 +182,9 @@ public class Main {
 		// (startTime = System.nanoTime())) );
 		// System.out.println();
 		feedArr = featureDetection.fillClosed(feedArr);
+		
+
+		
 		feedProc = ImageUtil.arrayToImg(feedArr);
 
 		Point p = ImageAnalysis.findCenter(feedArr);
@@ -191,8 +198,14 @@ public class Main {
 			g.drawImage(imgLeft, 0, 0, imgLeft.getWidth(), imgLeft.getHeight(), null);
 			if (leftRect != null) {
 				g.drawRect(leftRect.x, leftRect.y, leftRect.width, leftRect.height);
-
-				System.out.println(Arrays.toString(VisualMath.getDimensions(leftRect, imagesize, focals)));
+				Object[] data = VisualMath.getDimensions(leftRect, imageSize, focals);
+				//System.out.println(data[0]);
+				Rectangle bounds = (Rectangle)data[0];
+				System.out.println("Object size (cm) : " + bounds.getWidth() + " " + bounds.getHeight());
+				System.out.println("Relative Distance (cm): x: " + bounds.x + " yRel: " + bounds.y);
+				System.out.println("Distance (cm): " + data[1]);
+				System.out.println("Error (idk): " + data[2]);
+			//	System.out.println(Arrays.toString(VisualMath.getDimensions(leftRect, imagesize, focals)));
 			}
 
 			g2.drawImage(imgRight, 0, 0, imgRight.getWidth(), imgRight.getHeight(), null);
@@ -222,10 +235,10 @@ public class Main {
 			int threshHold = 34;
 			float stError = 3;
 
-			final float[] ratios = new float[] { 170.51f, 250.748f, 250.8337f }; // windows
+			final float[] ratios = new float[] {234.0f, 249.0f, 253.0f}; // windows
 																				// log
 																				// on
-			float[] deviations = new float[] { 65.42f, 4.311f, 13.71f };
+			float[] deviations = new float[]{6.0f, 5.0f, 3.0f};
 
 			// final float[] ratios = new float[] {85.852f, 253.0721f, 217.07f};
 			// //blue screens

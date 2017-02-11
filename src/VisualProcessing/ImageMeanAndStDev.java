@@ -56,6 +56,10 @@ public class ImageMeanAndStDev {
 		greenAvg /= total;
 		blueAvg /= total;
 		
+		redAvg = Math.round(redAvg);
+		greenAvg = Math.round(greenAvg);
+		blueAvg = Math.round(blueAvg);
+		
 		total = 0;
 		
 		for(int x = 0; x < img.getWidth(); x++) {
@@ -78,13 +82,15 @@ public class ImageMeanAndStDev {
 		blueStDev /= total;
 		greenStDev /= total;
 		
-		redStDev = Math.sqrt(redStDev);
-		blueStDev = Math.sqrt(blueStDev);
-		greenStDev = Math.sqrt(greenStDev);
+		redStDev = Math.round(Math.sqrt(redStDev));
+		blueStDev = Math.round(Math.sqrt(blueStDev));
+		greenStDev = Math.round(Math.sqrt(greenStDev));
 		
-		System.out.println("red: mean: " + redAvg + " stDev: " + redStDev);
+		System.out.println("red: mean: " + redAvg + " stDev: " + redStDev );
 		System.out.println("blue: mean: " + blueAvg + " stDev: " + blueStDev);
 		System.out.println("green: mean: " + greenAvg + " stDev: " + greenStDev);
+		System.out.println("Means: {" + redAvg + ", " + blueAvg + ", " + greenAvg + "}");
+		System.out.println("stDev: {" + redStDev + ", " + blueStDev + ", " + greenStDev + "}");
 		
 		} catch (Exception e) {
 			e.printStackTrace();

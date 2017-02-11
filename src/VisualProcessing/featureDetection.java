@@ -103,7 +103,7 @@ public class featureDetection {
 				if (Math.abs(zR) <= Standarderror && Math.abs(zB) <= Standarderror && Math.abs(zG) <= Standarderror) {
 					out.setRGB(x, y, rgb);
 				} else {
-					out.setRGB(x, y, (new Color(255, 255, 255).getRGB()));
+					out.setRGB(x, y, (new Color(0, 0, 0).getRGB()));
 				}
 
 			}
