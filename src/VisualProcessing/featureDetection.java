@@ -71,39 +71,31 @@ public class featureDetection {
 	}
 
 	/**
-	 * Removes colors from an image according to the desired averages and
-	 * standard deviations <br>
+	 * Removes colors from an image according to the desired error with the average hue and devation <br>
 	 * 
 	 * @param img
 	 *            The image
 	 * @param averages
-	 *            The average Color values, in the form {red, blue green}
+	 *            The average hue value
 	 * @param standardDevations
-	 *            The standard deviations of the color values in the form {red,
-	 *            blue, green}
+	 *            The average Deviation
 	 * @param Standarderror
 	 *            The standard error, or how many deviations at max a given
 	 *            value can be from the mean to be considered a point
 	 * @return The image with the colors removed
 	 */
-	public static BufferedImage colorCut(BufferedImage img, float[] averages, float[] standardDevations,
+	public static BufferedImage colorCut(BufferedImage img, float average, float standardDevation,
 			float Standarderror) {
 		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 		for (int x = 0; x < img.getWidth(); x++) {
 			for (int y = 0; y < img.getHeight(); y++) {
 				int rgb = img.getRGB(x, y);
-				float red = (rgb >> 16) & 0x000000FF;
-				float green = (rgb >> 8) & 0x000000FF;
-				float blue = (rgb) & 0x000000FF;
-
-				float zR = (red - averages[0]) / standardDevations[0];
-				float zB = (blue - averages[1]) / standardDevations[1];
-				float zG = (green - averages[2]) / standardDevations[2];
-
-				if (Math.abs(zR) <= Standarderror && Math.abs(zB) <= Standarderror && Math.abs(zG) <= Standarderror) {
+				double hue = ImageUtil.getHue(rgb);
+				double z = (hue - average)/(double)standardDevation;
+				if (z <= Standarderror) {
 					out.setRGB(x, y, rgb);
 				} else {
-					out.setRGB(x, y, (new Color(0, 0, 0).getRGB()));
+					out.setRGB(x, y, 0);
 				}
 
 			}

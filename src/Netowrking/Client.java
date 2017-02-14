@@ -1,4 +1,3 @@
-package Netowrking;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,12 +9,12 @@ import java.util.Scanner;
 public class Client {
 
 	private Socket s;
-	private Scanner in;
+	private BufferedReader in;
 	
-	public Client(int port, InetAddress ip) {
+	public Client(String host, int port) {
 		try {
-			s = new Socket(ip, port);
-			in = new Scanner(new InputStreamReader(s.getInputStream()));
+			s = new Socket(host, port);
+			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			
 			
 		} catch (IOException e) {
@@ -24,16 +23,48 @@ public class Client {
 		
 	}
 	
-	public String getLatest() {
-		while(in.hasNext()) {
-			String s = in.nextLine();
-			if(in.hasNextLine()) {
-				continue;
-			} else {
-				return s;
+//	public String getLatest() {
+//		while(in.hasNext()) {
+//			String s = in.nextLine();
+//			if(in.hasNextLine()) {
+//				continue;
+//			} else {
+//				return s;
+//			}
+//		}
+//		return null;
+//	}
+	
+	
+	
+	public static void main(String[] args) {
+		Client c = new Client("10.75.66.210", 44);
+		System.out.println("Connected to: " + c.s.getInetAddress());
+		while(true) {
+			try {
+				System.out.println(c.getIn().readLine());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-		return null;
 	}
+
+	public Socket getS() {
+		return s;
+	}
+
+	public void setS(Socket s) {
+		this.s = s;
+	}
+
+	public BufferedReader getIn() {
+		return in;
+	}
+
+	public void setIn(BufferedReader in) {
+		this.in = in;
+	}
+	
 	
 }

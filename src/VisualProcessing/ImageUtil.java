@@ -73,6 +73,25 @@ public class ImageUtil {
 		frame.pack();
 		frame.setVisible(true);
 	}
+	
+	public static double getHue(int RGB) {
+		Color c = new Color(RGB);
+		float rP = c.getRed()/255f;
+		float gP = c.getGreen()/255f;
+		float bP = c.getBlue()/255f;
+		float max = Math.max(rP, Math.max(gP, bP));
+		float min = Math.min(rP, Math.min(gP, bP));
+		float d = max - min;
+		if(d == 0) {
+			return 0;
+		} else if(max == rP) {
+			return 60 * (((gP - bP)/d)%6);
+		} else if(max == gP) {
+			return 60 * (((bP - rP)/d)+2);
+		} else  {
+			return 60 * (((rP - gP)/d)+4);
+		}
+	} 
 
 	/**
 	 * Converts an image array into an image

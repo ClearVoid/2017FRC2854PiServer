@@ -148,13 +148,13 @@ public class Main {
 		options.setVisible(true);
 	}
 	
-	public static void feedProcess(float lowPass, int threshHold, float[] averages, float[] deviations, float stError) throws InterruptedException {
+	public static void feedProcess(float lowPass, int threshHold, float average, float deviation, float stError) throws InterruptedException {
 		// long startTime = System.nanoTime();
 		feedFrame = webcam.getImage();
 		// System.out.println(feedFrame.getWidth());
 		// System.out.printf("%-35s%,15d\n", "Time to get image: " , -(startTime
 		// - (startTime = System.nanoTime())));
-		feedProc = featureDetection.colorCut(feedFrame, averages, deviations, stError);
+		feedProc = featureDetection.colorCut(feedFrame, average, deviation, stError);
 
 		// System.out.println(bar1.getValue()/100f);
 		// System.out.printf("%-35s%,15d\n", "Time to color cut: " , -(startTime
@@ -235,10 +235,8 @@ public class Main {
 			int threshHold = 34;
 			float stError = 3;
 
-			final float[] ratios = new float[] {234.0f, 249.0f, 253.0f}; // windows
-																				// log
-																				// on
-			float[] deviations = new float[]{6.0f, 5.0f, 3.0f};
+			float avg = 0; 
+			float deviation = 0;
 
 			// final float[] ratios = new float[] {85.852f, 253.0721f, 217.07f};
 			// //blue screens
@@ -257,7 +255,7 @@ public class Main {
 				label2.setText("LowPass: " + lowPass);
 				label3.setText("ThreshHold: " + threshHold);
 
-				feedProcess(lowPass, threshHold, ratios, deviations, stError);
+				feedProcess(lowPass, threshHold, avg, deviation, stError);
 
 				if (deltaTime >= 1000000000l) {
 					System.out.println("FPS: " + 1000000000d / (double) (startTime - lastTime));

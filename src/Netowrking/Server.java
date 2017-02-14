@@ -18,16 +18,28 @@ public class Server{
 		ServerSocket socket = null;
 		try {
 			socket = new ServerSocket(port, backflow);
+			System.out.println("Starting new Server at " + socket.getInetAddress());
 			while((s =socket.accept()) == null) {
 				Thread.sleep(10);
 			}
-			
+			System.out.println("A client at " + s.getInetAddress() + " connected");
 			writer =  new PrintWriter(s.getOutputStream(), true);
+			writer.println("Server ping");
 			isReady = true;
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public static void main(String[] args) throws InterruptedException {
+		Server s = new Server(44);
+		while(true) {
+			int rand = (int) (Math.random() * 100);
+			System.out.println("Sending: " + rand);
+			s.getWriter().println(rand + "");
+			Thread.sleep(1000);
+		}
 	}
 
 	public PrintWriter getWriter() {
