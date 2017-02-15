@@ -1,3 +1,4 @@
+package Netowrking;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,44 +7,61 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client {
+import javax.swing.JFrame;
+
+public class Client extends Thread {
 
 	private Socket s;
 	private BufferedReader in;
+	private String value;
 	
 	public Client(String host, int port) {
 		try {
 			s = new Socket(host, port);
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			
-			
+			this.start();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		} 
+		
 		
 	}
 	
-//	public String getLatest() {
-//		while(in.hasNext()) {
-//			String s = in.nextLine();
-//			if(in.hasNextLine()) {
-//				continue;
-//			} else {
-//				return s;
-//			}
-//		}
-//		return null;
-//	}
-	
-	
-	
-	public static void main(String[] args) {
-		Client c = new Client("10.75.66.210", 44);
-		System.out.println("Connected to: " + c.s.getInetAddress());
-		while(true) {
+	public String getLatest() {
+		return value;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while(!s.isClosed() || s.isConnected()) {
+			value = in.readLine();
+			if(value == null) {
+				break;
+			}
+			}
+		} catch (IOException e) {
+			//e.printStackTrace();
+		} finally {
 			try {
-				System.out.println(c.getIn().readLine());
+				s.close();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	
+	// r + c = l - 1
+	public static void main(String[] args) {
+		Client c = new Client("localhost", 44);
+		System.out.println("Connected to: " + c.s.getInetAddress());
+		while(!c.s.isClosed()) {
+			try {
+				System.out.println(c.getLatest());
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -65,6 +83,8 @@ public class Client {
 	public void setIn(BufferedReader in) {
 		this.in = in;
 	}
+
+
 	
 	
 }

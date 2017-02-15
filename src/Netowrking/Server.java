@@ -16,7 +16,7 @@ public class Server{
 	
 	public Server(int port)  {
 		ServerSocket socket = null;
-		try {
+		try  {
 			socket = new ServerSocket(port, backflow);
 			System.out.println("Starting new Server at " + socket.getInetAddress());
 			while((s =socket.accept()) == null) {
@@ -28,17 +28,26 @@ public class Server{
 			isReady = true;
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
+		} finally {
+			if(socket != null) {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
 		Server s = new Server(44);
+		int counter = 0;
 		while(true) {
-			int rand = (int) (Math.random() * 100);
+			int rand = (int) (counter++);
 			System.out.println("Sending: " + rand);
 			s.getWriter().println(rand + "");
-			Thread.sleep(1000);
+			Thread.sleep(100);
 		}
 	}
 

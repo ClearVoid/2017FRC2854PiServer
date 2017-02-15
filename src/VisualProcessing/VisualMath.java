@@ -10,11 +10,11 @@ import java.awt.Rectangle;
 public class VisualMath {
 
 	/**
-	 * Calculates the distance to a world space object that is completely in the FOV and is perpendicular to the image
+	 * Calculates the distance to a world space object, as well as its relative location and the angle of the object
 	 * @param selection The size of the image in screen space
 	 * @param size The size of the object in world space
 	 * @param focals The focal lengths of the camera
-	 * @return An object array with a rectangle with world space cords and an integer with the distance
+	 * @return An object array with a rectangle with world space cords, an integer with the distance, a double with an approximation of the angle in degrees and the error is something 
 	 */
 	public static Object[] getDimensions(Rectangle selection, double size[], double[] focals ) {
 		
@@ -31,9 +31,9 @@ public class VisualMath {
 		Point projTopLeft = new Point((int)(topLeft.getX() / ratio), (int)(topLeft.getY() / ratio));
 		Rectangle out = new Rectangle(projTopLeft.x, projTopLeft.y, (int)(selection.getWidth() / ratio),(int)( selection.getHeight() / ratio));
 		Integer i = new Integer((int) ((1d/ratio) * (focals[0] + focals[1])/2f));
+		Double d = Math.toDegrees(Math.acos((out.getWidth())/size[0]));
 		
-		
-		return new Object[] {out, i, error};
+		return new Object[] {out, i, d, error};
 	}
 	
 
