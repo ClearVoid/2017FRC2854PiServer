@@ -277,8 +277,8 @@ public class VisualDriver {
 					int threshHold = 34;
 					float stError = 3;
 
-					float avg = 0;
-					float deviation = 0;
+					float avg = 105.73f;
+					float deviation = 38;
 
 					// final float[] ratios = new float[] {85.852f, 253.0721f,
 					// 217.07f};

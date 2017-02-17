@@ -15,9 +15,8 @@ public class Server{
 	private final int backflow = 5;
 	
 	public Server(int port)  {
-		ServerSocket socket = null;
-		try  {
-			socket = new ServerSocket(port, backflow);
+		try (ServerSocket socket = new ServerSocket(port, backflow);) {
+
 			System.out.println("Starting new Server at " + socket.getInetAddress());
 			while((s =socket.accept()) == null) {
 				Thread.sleep(10);
@@ -28,15 +27,7 @@ public class Server{
 			isReady = true;
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
-		} finally {
-			if(socket != null) {
-				try {
-					socket.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		} 
 		
 	}
 	
