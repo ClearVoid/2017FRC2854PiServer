@@ -25,9 +25,9 @@ import javax.swing.JSlider;
 import javax.swing.SpringLayout;
 import javax.swing.SwingUtilities;
 
-import Netowrking.Server;
-
 import com.github.sarxos.webcam.Webcam;
+
+import Networking.Server;
 
 public class VisualDriver {
 

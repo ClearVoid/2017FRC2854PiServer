@@ -1,6 +1,6 @@
 package VisualProcessing;
 
-import Netowrking.Server;
+import Networking.Server;
 
 public class Main {
 

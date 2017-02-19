@@ -1,4 +1,4 @@
-package Netowrking;
+package Networking;
 
 import java.io.IOException;
 import java.io.PrintWriter;
