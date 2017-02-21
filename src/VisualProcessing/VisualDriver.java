@@ -1,30 +1,8 @@
 package VisualProcessing;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Vector;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.SpringLayout;
-import javax.swing.SwingUtilities;
-
 import com.github.sarxos.webcam.Webcam;
 
 import Networking.Server;
@@ -39,27 +17,27 @@ public class VisualDriver {
 	public static BufferedImage feedProc;
 	public static int[][] feedArr;
 
-	public static JFrame frame = new JFrame();
-	public static JFrame frame1 = new JFrame();
-	public static JFrame frame2 = new JFrame();
-
-	public static BufferedImage screen;
-	public static BufferedImage screen2;
-
-	public static Graphics g;
-	public static Graphics g1;
-	public static Graphics g2;
-
-	public static JFrame options = new JFrame();
-	public static JSlider bar1 = new JSlider();
-	public static JSlider bar2 = new JSlider();
-	public static JSlider bar3 = new JSlider();
-
-	public static JLabel label1 = new JLabel();
-	public static JLabel label2 = new JLabel();
-	public static JLabel label3 = new JLabel();
-
-	public static JPanel panel = new JPanel();
+//	public static JFrame frame = new JFrame();
+//	public static JFrame frame1 = new JFrame();
+//	public static JFrame frame2 = new JFrame();
+//
+//	public static BufferedImage screen;
+//	public static BufferedImage screen2;
+//
+//	public static Graphics g;
+//	public static Graphics g1;
+//	public static Graphics g2;
+//
+//	public static JFrame options = new JFrame();
+//	public static JSlider bar1 = new JSlider();
+//	public static JSlider bar2 = new JSlider();
+//	public static JSlider bar3 = new JSlider();
+//
+//	public static JLabel label1 = new JLabel();
+//	public static JLabel label2 = new JLabel();
+//	public static JLabel label3 = new JLabel();
+//
+//	public static JPanel panel = new JPanel();
 
 	public static long lastTime = System.nanoTime();
 	public static long startTime = System.nanoTime();
@@ -91,73 +69,73 @@ public class VisualDriver {
 		feedFrame = webcam.getImage();
 	}
 
-	public static void JFrameInit() {
-		System.out.println("Initializing JFrames");
-		BufferedImage screen = new BufferedImage(feedFrame.getWidth() * 2,
-				feedFrame.getHeight() * 2, BufferedImage.TYPE_3BYTE_BGR);
-		g = screen.createGraphics();
-		g.setColor(Color.red);
-
-		frame.add(new JLabel(new ImageIcon(screen)));
-		frame.pack();
-		frame.setVisible(true);
-		frame.setTitle("Final Image");
-
-		BufferedImage screen2 = new BufferedImage(feedFrame.getWidth(),
-				feedFrame.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-		g2 = screen2.createGraphics();
-		g2.setColor(Color.red);
-
-		frame2.add(new JLabel(new ImageIcon(screen2)));
-		frame2.pack();
-		frame2.setVisible(true);
-
-		BufferedImage screen1 = new BufferedImage(feedFrame.getWidth(),
-				feedFrame.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-		g1 = screen1.createGraphics();
-		g1.setColor(Color.red);
-
-		frame1.add(new JLabel(new ImageIcon(screen1)));
-		frame1.pack();
-		frame1.setVisible(true);
-		frame1.setLocationRelativeTo(null);
-		frame1.setTitle("Camera");
-		frame.setLocation(500, 500);
-
-		label1.setText("ColorCut Error: ");
-		label1.setLabelFor(bar1);
-		label2.setText("LowPass: ");
-		label2.setLabelFor(bar2);
-		label3.setText("ThreshHold: ");
-		label3.setLabelFor(bar3);
-
-		bar1.setMaximum(5000);
-		bar1.setValue((int) (9.7 * 50));
-		bar1.setMinimum(1);
-		bar1.setPaintLabels(true);
-		bar2.setMaximum(500);
-		bar2.setValue((int) (.73 * 100));
-		bar2.setMinimum(1);
-		bar2.setPaintLabels(true);
-		bar3.setMaximum(1000);
-		bar3.setValue(173);
-		bar3.setMinimum(1);
-		bar3.setPaintLabels(true);
-
-		panel = new JPanel();
-
-		panel.add(label1);
-		panel.add(bar1);
-		panel.add(label2);
-		panel.add(bar2);
-		panel.add(label3);
-		panel.add(bar3);
-
-		options.add(panel);
-		options.setSize(1500, 65);
-		// options.pack();
-		options.setVisible(true);
-	}
+//	public static void JFrameInit() {
+//		System.out.println("Initializing JFrames");
+//		BufferedImage screen = new BufferedImage(feedFrame.getWidth() * 2,
+//				feedFrame.getHeight() * 2, BufferedImage.TYPE_3BYTE_BGR);
+//		g = screen.createGraphics();
+//		g.setColor(Color.red);
+//
+//		frame.add(new JLabel(new ImageIcon(screen)));
+//		frame.pack();
+//		frame.setVisible(true);
+//		frame.setTitle("Final Image");
+//
+//		BufferedImage screen2 = new BufferedImage(feedFrame.getWidth(),
+//				feedFrame.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+//		g2 = screen2.createGraphics();
+//		g2.setColor(Color.red);
+//
+//		frame2.add(new JLabel(new ImageIcon(screen2)));
+//		frame2.pack();
+//		frame2.setVisible(true);
+//
+//		BufferedImage screen1 = new BufferedImage(feedFrame.getWidth(),
+//				feedFrame.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+//		g1 = screen1.createGraphics();
+//		g1.setColor(Color.red);
+//
+//		frame1.add(new JLabel(new ImageIcon(screen1)));
+//		frame1.pack();
+//		frame1.setVisible(true);
+//		frame1.setLocationRelativeTo(null);
+//		frame1.setTitle("Camera");
+//		frame.setLocation(500, 500);
+//
+//		label1.setText("ColorCut Error: ");
+//		label1.setLabelFor(bar1);
+//		label2.setText("LowPass: ");
+//		label2.setLabelFor(bar2);
+//		label3.setText("ThreshHold: ");
+//		label3.setLabelFor(bar3);
+//
+//		bar1.setMaximum(5000);
+//		bar1.setValue((int) (9.7 * 50));
+//		bar1.setMinimum(1);
+//		bar1.setPaintLabels(true);
+//		bar2.setMaximum(500);
+//		bar2.setValue((int) (.73 * 100));
+//		bar2.setMinimum(1);
+//		bar2.setPaintLabels(true);
+//		bar3.setMaximum(1000);
+//		bar3.setValue(173);
+//		bar3.setMinimum(1);
+//		bar3.setPaintLabels(true);
+//
+//		panel = new JPanel();
+//
+//		panel.add(label1);
+//		panel.add(bar1);
+//		panel.add(label2);
+//		panel.add(bar2);
+//		panel.add(label3);
+//		panel.add(bar3);
+//
+//		options.add(panel);
+//		options.setSize(1500, 65);
+//		// options.pack();
+//		options.setVisible(true);
+//	}
 
 	public static void feedProcess(float lowPass, int threshHold,
 			float average, float deviation, float stError)
@@ -208,11 +186,11 @@ public class VisualDriver {
 			BufferedImage imgRight = ImageUtil.arrayToImg(splitImages[1]);
 			Rectangle leftRect = ImageAnalysis.getRect(splitImages[0], .5f);
 			Rectangle rightRect = ImageAnalysis.getRect(splitImages[1], .5f);
-			g.drawImage(imgLeft, 0, 0, imgLeft.getWidth(), imgLeft.getHeight(),
-					null);
+			//g.drawImage(imgLeft, 0, 0, imgLeft.getWidth(), imgLeft.getHeight(),
+			//		null);
 			if (leftRect != null) {
-				g.drawRect(leftRect.x, leftRect.y, leftRect.width,
-						leftRect.height);
+				//g.drawRect(leftRect.x, leftRect.y, leftRect.width,
+				//		leftRect.height);
 				Object[] data = VisualMath.getDimensions(leftRect, imageSize,
 						focals);
 				// System.out.println(data[0]);
@@ -229,11 +207,11 @@ public class VisualDriver {
 				v[0] = new VisualData(bounds, (int)data[1], (double)data[2], (double)data[3]);
 			}
 
-			g2.drawImage(imgRight, 0, 0, imgRight.getWidth(),
-					imgRight.getHeight(), null);
+			//g2.drawImage(imgRight, 0, 0, imgRight.getWidth(),
+			//		imgRight.getHeight(), null);
 			if (rightRect != null) {
-				g2.drawRect(rightRect.x, rightRect.y, rightRect.width,
-						rightRect.height);
+				//g2.drawRect(rightRect.x, rightRect.y, rightRect.width,
+				//		rightRect.height);
 				
 				Object[] data = VisualMath.getDimensions(rightRect, imageSize,
 						focals);
@@ -243,18 +221,18 @@ public class VisualDriver {
 			}
 			s.getWriter().println(VisualData.encode(v));
 		} else {
-			g.drawImage(feedProc, 0, 0, feedProc.getWidth(),
-					feedProc.getHeight(), null);
+		//	g.drawImage(feedProc, 0, 0, feedProc.getWidth(),
+		//			feedProc.getHeight(), null);
 		}
-		g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(),
-				feedFrame.getHeight(), null);
+		//g1.drawImage(feedFrame, 0, 0, feedFrame.getWidth(),
+		//		feedFrame.getHeight(), null);
 
 	}
 
 	
 	public static void init(Server s) {
 		webcamInit();
-		JFrameInit();
+		//JFrameInit();
 		EdgeThin.init();
 		VisualDriver.s = s;
 	}
@@ -287,35 +265,35 @@ public class VisualDriver {
 
 					while (true) {
 
-						startTime = System.nanoTime();
-						deltaTime += -(lastTime - startTime);
-
-						stError = bar1.getValue() / 50f;
-						lowPass = bar2.getValue() / 100f;
-						threshHold = bar3.getValue();
-
-						label1.setText("ColorCut Error: " + stError);
-						label2.setText("LowPass: " + lowPass);
-						label3.setText("ThreshHold: " + threshHold);
+//						startTime = System.nanoTime();
+//						deltaTime += -(lastTime - startTime);
+//
+//						 stError = bar1.getValue() / 50f;
+//						lowPass = bar2.getValue() / 100f;
+//						threshHold = bar3.getValue();
+//
+//						label1.setText("ColorCut Error: " + stError);
+//						label2.setText("LowPass: " + lowPass);
+//						label3.setText("ThreshHold: " + threshHold);
 
 						feedProcess(lowPass, threshHold, avg, deviation,
 								stError);
 
 						if (deltaTime >= 1000000000l) {
-							System.out.println("FPS: " + 1000000000d
+						System.out.println("FPS: " + 1000000000d
 									/ (double) (startTime - lastTime));
 							deltaTime = 0;
-							System.out.println(label1.getText() + " "
-									+ label2.getText() + " " + label3.getText());
+//							System.out.println(label1.getText() + " "
+//									+ label2.getText() + " " + label3.getText());
 						}
 
-						frame.repaint();
-						frame.pack();
-						frame1.repaint();
-						frame1.pack();
-						frame2.repaint();
-						frame2.pack();
-						frames++;
+//						frame.repaint();
+//						frame.pack();
+//						frame1.repaint();
+//						frame1.pack();
+//						frame2.repaint();
+//						frame2.pack();
+//						frames++;
 						lastTime = startTime;
 					}
 

@@ -71,7 +71,8 @@ public class featureDetection {
 	}
 
 	/**
-	 * Removes colors from an image according to the desired error with the average hue and devation <br>
+	 * Removes colors from an image according to the desired error with the
+	 * average hue and devation <br>
 	 * 
 	 * @param img
 	 *            The image
@@ -91,7 +92,7 @@ public class featureDetection {
 			for (int y = 0; y < img.getHeight(); y++) {
 				int rgb = img.getRGB(x, y);
 				double hue = ImageUtil.getHue(rgb);
-				double z = (hue - average)/(double)standardDevation;
+				double z = (hue - average) / (double) standardDevation;
 				if (z <= Standarderror) {
 					out.setRGB(x, y, rgb);
 				} else {
@@ -103,9 +104,32 @@ public class featureDetection {
 		return out;
 
 	}
+
+	public static BufferedImage colorCutRGB(BufferedImage img, float[] average, float[] standardDevation,
+			float Standarderror) {
+		BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+		for (int x = 0; x < img.getWidth(); x++) {
+			for (int y = 0; y < img.getHeight(); y++) {
+				int rgb = img.getRGB(x, y);
+				
+				Color c = new Color(rgb);
+				if((c.getRed()-average[0])/standardDevation[0] <= Standarderror && (c.getRed()-average[0])/standardDevation[0] <= Standarderror && (c.getRed()-average[0])/standardDevation[0] <= Standarderror  ) {
+				
+					out.setRGB(x, y, rgb);
+				} else {
+					out.setRGB(x, y, 0);
+				}
+
+			}
+		}return out;
+
+	}
+
 	/**
 	 * Thins an image using the zheng thinning algorithm
-	 * @param img The image
+	 * 
+	 * @param img
+	 *            The image
 	 * @return The thinned image
 	 */
 	public static BufferedImage zhengThinning(BufferedImage img) {
@@ -207,6 +231,7 @@ public class featureDetection {
 	/**
 	 * fills in closed regions of an image <br>
 	 * There should not be single pixels present in the image
+	 * 
 	 * @param img
 	 * @return
 	 */
